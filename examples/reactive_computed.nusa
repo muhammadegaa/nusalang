@@ -1,0 +1,26 @@
+// Reactive Runtime Demo - Computed Signals
+// Shows derived reactive state
+
+fn main() {
+  let firstName = signal("Muhammad")
+  let lastName = signal("Ega")
+  
+  // Computed signal auto-updates
+  let fullName = computed(
+    fn() { return `${firstName.value} ${lastName.value}` },
+    [firstName, lastName]
+  )
+  
+  print(`Full name: ${fullName.value}`)
+  
+  // Update firstName
+  firstName.value = "John"
+  print(`Updated: ${fullName.value}`)
+  
+  // Update lastName
+  lastName.value = "Doe"
+  print(`Final: ${fullName.value}`)
+}
+
+main()
+

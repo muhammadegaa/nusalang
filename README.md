@@ -2,9 +2,17 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.8-Bridge (v0.8.0-bridge-ready)** - Parser bridge complete, deep integration pending.
+**Current Version: Phase 0.9 (v0.9.0-alpha)** - Reactive runtime with signals, computed values, and WebSocket streaming.
 
 ## ✨ Features
+
+### Phase 0.9 - Reactive Runtime & Live Data 🔄
+- ✅ **Signals**: Reactive state with `signal()` - auto-notify subscribers
+- ✅ **Computed Values**: Derived state with `computed()` - auto-updates
+- ✅ **WebSocket Streaming**: Real-time data with `subscribe()` and `publish()`
+- ✅ **22 Tests Passing**: New reactive runtime fully tested
+- ✅ **Runtime Integration**: All reactive primitives available in NusaLang code
+- ✅ **Examples**: `reactive_simple.nusa`, `reactive_computed.nusa`
 
 ### Phase 0.8-Bridge (v0.8.0-bridge-ready) - Parser Bridge Layer 🌉
 - ✅ **Parser Bridge**: Complete CST-to-Pratt token bridge (`bridge.ts`)
@@ -68,6 +76,32 @@ npm test
 ```
 
 ## 🎯 Quick Start
+
+### Phase 0.9 Example - Reactive State
+
+```nusa
+// reactive_simple.nusa
+fn main() {
+  // Create reactive signal
+  let count = signal(0)
+  
+  // Subscribe to changes
+  count.subscribe(fn() {
+    print(`Count: ${count.value}`)
+  })
+  
+  // Updates trigger subscribers
+  count.value = 5  // Prints: "Count: 5"
+  count.value = 10 // Prints: "Count: 10"
+}
+
+main()
+```
+
+```bash
+# Run with NusaLang
+node dist/cli.js run examples/reactive_simple.nusa
+```
 
 ### Phase 0.5 Example - Template Literals & Config
 

@@ -1,0 +1,24 @@
+// Reactive Runtime Demo - Phase 0.9
+// Simple signal-based reactive state
+
+fn main() {
+  // Create reactive signals
+  let count = signal(0)
+  let name = signal("NusaLang")
+  
+  // Subscribe to changes
+  count.subscribe(fn() {
+    print(`Count changed to: ${count.value}`)
+  })
+  
+  // Update values (triggers subscribers)
+  count.value = 5
+  count.value = 10
+  
+  // Print final state
+  print(`Final count: ${count.value}`)
+  print(`Name: ${name.value}`)
+}
+
+main()
+

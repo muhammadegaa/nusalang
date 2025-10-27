@@ -6,6 +6,8 @@
 import * as vm from 'vm';
 import { db } from './db.js';
 import { router } from './router.js';
+import { signal, effect, computed, batch, untrack } from './reactivity.js';
+import { subscribe, publish, closeConnection, closeAllConnections, isConnected } from './websocket.js';
 
 export interface ExecutionContext {
   [key: string]: any;
@@ -67,6 +69,20 @@ export async function execute(
     if (config) {
       sandbox.config = config;
     }
+
+    // Add reactive runtime
+    sandbox.signal = signal;
+    sandbox.effect = effect;
+    sandbox.computed = computed;
+    sandbox.batch = batch;
+    sandbox.untrack = untrack;
+
+    // Add WebSocket runtime
+    sandbox.subscribe = subscribe;
+    sandbox.publish = publish;
+    sandbox.closeConnection = closeConnection;
+    sandbox.closeAllConnections = closeAllConnections;
+    sandbox.isConnected = isConnected;
 
     // Track exports
     const exports: Record<string, any> = {};
