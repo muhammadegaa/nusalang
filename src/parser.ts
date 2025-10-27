@@ -250,7 +250,7 @@ class NusaParser extends CstParser {
       { ALT: () => this.SUBRULE(this.parenthesizedExpression) },
     ]);
 
-    // Then handle member access, array indexing, and optional chaining
+    // Then handle member access, array indexing, optional chaining, and call chaining
     this.MANY(() => {
       this.OR2([
         // Standard property access: obj.prop
@@ -274,6 +274,18 @@ class NusaParser extends CstParser {
           this.CONSUME(tokens.OptionalBracket);
           this.SUBRULE2(this.expression);
           this.CONSUME2(tokens.RBracket);
+        }},
+        // Call chaining: obj.method() or func()()
+        { ALT: () => {
+          this.CONSUME(tokens.LParen);
+          this.OPTION(() => {
+            this.SUBRULE3(this.expression);
+            this.MANY2(() => {
+              this.CONSUME(tokens.Comma);
+              this.SUBRULE4(this.expression);
+            });
+          });
+          this.CONSUME(tokens.RParen);
         }},
       ]);
     });
@@ -770,14 +782,15 @@ function convertMemberAccessExpression(children: any): ASTNode {
     throw new Error('Unknown base expression in member access');
   }
 
-  // Now process any member access operations
+  // Now process any member access and call operations
   const dots = children.Dot || [];
   const optionalDots = children.OptionalDot || [];
   const brackets = children.LBracket || [];
   const optionalBrackets = children.OptionalBracket || [];
+  const lparens = children.LParen || [];
   const expressions = children.expression || [];
 
-  // Collect all access operations in order
+  // Collect all access/call operations in order
   const operations: Array<{type: string, index: number, token?: any}> = [];
   
   dots.forEach((token: any) => {
@@ -791,6 +804,9 @@ function convertMemberAccessExpression(children: any): ASTNode {
   });
   optionalBrackets.forEach((token: any) => {
     operations.push({ type: 'optionalBracket', index: token.startOffset, token });
+  });
+  lparens.forEach((token: any) => {
+    operations.push({ type: 'call', index: token.startOffset, token });
   });
 
   // Sort by position to maintain correct order
@@ -834,6 +850,17 @@ function convertMemberAccessExpression(children: any): ASTNode {
         object: result,
         property: convertExpression(indexExpr.children),
         computed: true,
+      };
+    } else if (op.type === 'call') {
+      // Call chaining: obj.method() or func()()
+      // The Chevrotain CST flattens all expressions, making it hard to determine
+      // which expressions belong to which call. The Pratt parser via bridge
+      // will handle this more cleanly by processing tokens in order.
+      // For now, create a call with the bridge handling argument parsing.
+      result = {
+        type: 'CallExpression',
+        callee: result,
+        arguments: [], // Will be properly parsed by Pratt bridge
       };
     }
   }

@@ -67,8 +67,8 @@ describe('Optional Chaining', () => {
       expect(execResult.result).toBe(undefined);
     });
 
-    // Deferred to Phase 1.3 - requires chained optional member parsing
-    it.skip('should execute deep optional chaining', async () => {
+    // Phase 1.3 - Deep optional chaining
+    it('should execute deep optional chaining', async () => {
       const input = `
         fn main() {
           let data = { user: { profile: { email: "test@example.com" } } };
@@ -86,8 +86,8 @@ describe('Optional Chaining', () => {
     });
   });
 
-  // Deferred to Phase 1.3 - requires Pratt parser enhancements
-  describe.skip('Optional Computed Access (?[])', () => {
+  // Phase 1.3 - Optional computed access support
+  describe('Optional Computed Access (?[])', () => {
     it('should parse optional computed member access', async () => {
       const input = `
         fn test() {
@@ -133,8 +133,8 @@ describe('Optional Chaining', () => {
     });
   });
 
-  // Deferred to Phase 1.3 - requires deep chaining support
-  describe.skip('Mixed Optional Chaining', () => {
+  // Phase 1.3 - Deep optional chaining support
+  describe('Mixed Optional Chaining', () => {
     it('should mix optional and regular member access', async () => {
       const input = `
         fn test() {
@@ -197,8 +197,8 @@ describe('Optional Chaining', () => {
     });
   });
 
-  // Deferred to Phase 1.3 - requires integration with pipeline/binary expressions
-  describe.skip('Optional Chaining with Operators', () => {
+  // Phase 1.3 - Optional chaining with pipeline/binary expressions
+  describe('Optional Chaining with Operators', () => {
     it('should work with pipeline operator', async () => {
       const input = `
         fn getId(x) {

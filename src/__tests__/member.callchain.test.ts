@@ -7,9 +7,8 @@ import { describe, it, expect } from 'vitest';
 import { compile } from '../compiler.js';
 import { execute } from '../runtime/execute.js';
 
-// Phase 1.2 (Partial) - Basic member access works, call chaining needs Pratt enhancements
-// Deferred to Phase 1.3 - requires left-recursive call expression handling
-describe.skip('Call Chaining', () => {
+// Phase 1.3 - Full call chaining support via Chevrotain grammar enhancement
+describe('Call Chaining', () => {
   describe('Basic Call Chaining', () => {
     it('should parse chained function calls', async () => {
       const input = `

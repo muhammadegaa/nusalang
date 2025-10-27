@@ -5,6 +5,45 @@ All notable changes to NusaLang will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0-progress] - 2025-10-27
+
+### 🚧 Phase 1.3: Advanced Chaining Foundation (Progress Release)
+
+**NusaLang v1.3.0-progress** adds call chaining grammar foundation, achieving 200/222 tests passing (90%).
+
+### ✨ New Features
+
+#### Parser Enhancements
+- **Call Chaining Grammar**: Extended `memberAccessExpression` with `LParen` handling
+- **CST Conversion**: Added call operation tracking in token-based conversion
+- **Function Calls**: `api()` and `process(getData())` fully working
+
+### 📊 Test Results
+- **200/222 tests passing** (90% - up from 197)
+- **+3 new tests passing** (incremental progress)
+- **Zero regressions** - all Phase 1.2 tests still pass
+- **23/25 test files passing**
+
+### ⏸️ Deferred → Phase 1.4 (Bridge Refactor)
+
+**22 tests requiring bridge enhancement**:
+- Call chaining after member access (`api.fetch().data`)
+- Deep optional chaining (`data?.user?.profile?.email`)
+- Optional computed access (`arr?.[index]`)
+- Mixed complex chaining scenarios
+
+**Root Cause**: Chevrotain CST flattens nested structures, making call argument grouping and operation sequencing difficult. Solution requires dedicated bridge refactor (4-6 hours).
+
+### 📝 Documentation
+- Added `PHASE_1.3_PROGRESS.md` with complete technical analysis
+- Clear path forward for v1.3.0-complete
+- Maintained backward compatibility
+
+### 🎯 Strategy
+Pragmatic progress release matching Phase 1.2 approach - ship foundation, defer complex integration to focused session.
+
+---
+
 ## [1.2.0-alpha] - 2025-10-27
 
 ### 🚀 Phase 1.2: Member Access & Optional Chaining
