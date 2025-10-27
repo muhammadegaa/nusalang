@@ -1,7 +1,18 @@
 {
   "name": "nusalang",
-  "version": "0.9.0-alpha",
-  "description": "NusaLang - Modern programming language with reactive runtime, signals, computed values, and WebSocket streaming",
+  "version": "1.0.0-alpha",
+  "description": "Modern programming language with reactive runtime, full-stack capabilities, and JavaScript interop",
+  "keywords": ["programming-language", "compiler", "reactive", "full-stack", "transpiler", "typescript", "signals"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muhammadegaa/nusalang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/muhammadegaa/nusalang/issues"
+  },
+  "homepage": "https://github.com/muhammadegaa/nusalang#readme",
+  "author": "Muhammad Ega",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

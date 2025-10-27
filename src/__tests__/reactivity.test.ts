@@ -78,7 +78,7 @@ describe('Reactive Runtime', () => {
     it('tracks multiple dependencies', () => {
       const a = signal(2);
       const b = signal(3);
-      const product = new (computed as any).Computed(() => a.value * b.value, [a, b]);
+      const product = new Computed(() => a.value * b.value, [a, b]);
       expect(product.value).toBe(6);
       a.value = 4;
       expect(product.value).toBe(12);
@@ -95,7 +95,7 @@ describe('Reactive Runtime', () => {
     it('chains computed values', () => {
       const count = signal(2);
       const doubled = new Computed(() => count.value * 2, [count]);
-      const quadrupled = new (computed as any).Computed(() => doubled.value * 2, [doubled]);
+      const quadrupled = new Computed(() => doubled.value * 2, [doubled]);
       expect(quadrupled.value).toBe(8);
       count.value = 5;
       expect(quadrupled.value).toBe(20);
@@ -115,7 +115,7 @@ describe('Reactive Runtime', () => {
     it('works with complex reactivity graph', () => {
       const firstName = signal('John');
       const lastName = signal('Doe');
-      const fullName = new (computed as any).Computed(
+      const fullName = new Computed(
         () => `${firstName.value} ${lastName.value}`,
         [firstName, lastName]
       );
@@ -129,9 +129,9 @@ describe('Reactive Runtime', () => {
 
     it('handles multiple levels of computation', () => {
       const base = signal(1);
-      const times2 = new (computed as any).Computed(() => base.value * 2, [base]);
-      const times4 = new (computed as any).Computed(() => times2.value * 2, [times2]);
-      const times8 = new (computed as any).Computed(() => times4.value * 2, [times4]);
+      const times2 = new Computed(() => base.value * 2, [base]);
+      const times4 = new Computed(() => times2.value * 2, [times2]);
+      const times8 = new Computed(() => times4.value * 2, [times4]);
       
       expect(times8.value).toBe(8);
       base.value = 2;

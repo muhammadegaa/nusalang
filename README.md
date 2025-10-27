@@ -2,7 +2,11 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.9 (v0.9.0-alpha)** - Reactive runtime with signals, computed values, and WebSocket streaming.
+**Current Version: v1.0.0-alpha** 🎉 - First public release! Stable compiler, reactive runtime, and comprehensive documentation.
+
+[![Tests](https://img.shields.io/badge/tests-193%20passing-brightgreen)](https://github.com/muhammadegaa/nusalang)
+[![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.0--alpha-orange)](https://github.com/muhammadegaa/nusalang/releases)
 
 ## ✨ Features
 

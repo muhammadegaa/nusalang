@@ -9,8 +9,8 @@ export type Subscriber = () => void;
  * Signal: Observable value
  */
 export class Signal<T> {
-  private _value: T;
-  private subscribers = new Set<Subscriber>();
+  protected _value: T;
+  protected subscribers = new Set<Subscriber>();
 
   constructor(initial: T) {
     this._value = initial;
@@ -57,20 +57,35 @@ export class Effect {
  * Computed: Derived signal
  */
 export class Computed<T> extends Signal<T> {
-  private unsubscribers: Array<() => void> = [];
+  private unsubscribers: Array<() => void>;
+  private computeFn: () => T;
 
-  constructor(private computeFn: () => T, deps: Signal<any>[]) {
-    super(computeFn());
+  constructor(computeFn: () => T, deps: Signal<any>[]) {
+    const initialValue = computeFn();
+    super(initialValue);
+    this.computeFn = computeFn;
+    this.unsubscribers = [];
     
     // Subscribe to all dependencies
     deps.forEach(dep => {
       const unsub = dep.subscribe(() => {
-        super.value = this.computeFn();
+        // Directly update the internal value and notify subscribers
+        const newValue = this.computeFn();
+        if (!Object.is(newValue, this._value)) {
+          this._value = newValue;
+          this.subscribers.forEach(fn => fn());
+        }
       });
       this.unsubscribers.push(unsub);
     });
   }
 
+  // Override getter to maintain access
+  get value(): T {
+    return this._value;
+  }
+
+  // Override setter to prevent external modification
   set value(_: T) {
     throw new Error('Cannot set computed signal');
   }
