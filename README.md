@@ -2,17 +2,21 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.2 (v0.2.0-alpha)** - A TypeScript-based compiler with runtime execution, page routing, and declarative data loading.
+**Current Version: Phase 0.3 (v0.3.0-alpha)** - A full-stack web platform with HTTP server, UI rendering, and complete page routing.
 
 ## ✨ Features
 
-### Phase 0.2 (v0.2.0-alpha) - Runtime & Foundation ⚡
-- ✅ **Runtime Execution**: Compile and run `.nusa` files with `nusa run`
-- ✅ **Page Declaration**: Declarative routing with `page "/path" { ... }`
-- ✅ **Data Loading**: Async data fetching with `data varName = await expression`
-- ✅ **Mock Database**: In-memory CRUD with fluent API
-- ✅ **Router System**: Page registration and route matching
-- ✅ **Standard Library**: http, json, ui utility stubs
+### Phase 0.3 (v0.3.0-alpha) - HTTP Server & UI Platform 🌐
+- ✅ **HTTP Server**: Built-in web server with `nusa dev`
+- ✅ **UI Rendering**: HTML generation from UI blocks
+- ✅ **Build System**: Static compilation with `nusa build`
+- ✅ **Auto-routing**: Pages exposed as HTTP endpoints
+- ✅ **JSON APIs**: Automatic content-type detection
+- ✅ **Example Apps**: Blog, dashboard, API demos
+
+### Phase 0.2 - Runtime Foundation
+- ✅ Runtime execution, page declarations, data loading
+- ✅ Mock database, router system, standard library
 
 ### Phase 0.1 - Compiler Foundation
 NusaLang Phase 0.1/0.2 supports:
@@ -229,26 +233,37 @@ nusalang/
 
 ## 🛠️ CLI Usage
 
-### Phase 0.2 Commands
+### Phase 0.3 Commands
 
 ```bash
+# Start development server (NEW!)
+node dist/cli.js dev [input.nusa] -p 3000
+
+# Build static files (NEW!)
+node dist/cli.js build [path] -o dist
+
 # Run a .nusa file (compile + execute)
 node dist/cli.js run <input.nusa>
 
-# Run with debug output
-node dist/cli.js run <input.nusa> --debug
-
 # Compile to JavaScript
 node dist/cli.js compile <input.nusa> [output.js]
-
-# Compile with watch mode
-node dist/cli.js compile <input.nusa> --watch
 ```
 
 ### Command Reference
 
+**`nusa dev`** - Start development server ⭐ NEW
+- `[input]` - Optional .nusa file to load
+- `-p, --port <port>` - Port number (default: 3000)
+- `-H, --host <host>` - Host address (default: localhost)
+- `--no-reload` - Disable hot reload
+
+**`nusa build`** - Build static output ⭐ NEW
+- `[input]` - Input file or directory (default: current directory)
+- `-o, --output <dir>` - Output directory (default: ./dist)
+- `--html` - Generate static HTML files
+
 **`nusa run`** - Compile and execute
-- `--debug` - Show compilation and execution details
+- `--debug` - Show compilation details
 - `--no-db` - Disable database module
 - `--no-router` - Disable router module
 
@@ -264,10 +279,15 @@ node dist/cli.js compile <input.nusa> --watch
 
 Check out the `examples/` directory for complete examples:
 
-**Phase 0.2 Examples (with Runtime)**
+**Phase 0.3 Examples (HTTP Server)** ⭐ NEW
+- **`blog.nusa`** - Blog with pages and data loading
+- **`dashboard_http.nusa`** - Dashboard served over HTTP
+- **`api_demo.nusa`** - API endpoints demonstration
+
+**Phase 0.2 Examples (Runtime)**
 - **`hello_page.nusa`** - Page declarations and routing
 - **`dashboard.nusa`** - Data loading with async
-- **`db_query.nusa`** - Database operations and pages
+- **`db_query.nusa`** - Database operations
 
 **Phase 0.1 Examples (Compilation)**
 - **`basic.nusa`** - Functions, variables, and expressions
@@ -276,25 +296,27 @@ Check out the `examples/` directory for complete examples:
 - **`api-endpoint.nusa`** - API annotations
 - **`complete.nusa`** - All features combined
 
-Run Phase 0.2 examples:
+Run examples:
 
 ```bash
 npm run build
 
+# Start HTTP server with Phase 0.3 examples
+node dist/cli.js dev examples/blog.nusa
+node dist/cli.js dev examples/dashboard_http.nusa -p 8080
+node dist/cli.js dev examples/api_demo.nusa
+
 # Run Phase 0.2 examples
 node dist/cli.js run examples/hello_page.nusa
 node dist/cli.js run examples/dashboard.nusa
-node dist/cli.js run examples/db_query.nusa
 
-# Compile Phase 0.1 examples
-node dist/cli.js compile examples/basic.nusa
-node dist/cli.js compile examples/async-await.nusa
-node dist/cli.js compile examples/pipeline.nusa
+# Build all examples
+node dist/cli.js build examples/ -o dist/examples
 ```
 
 ## 🧪 Testing
 
-The project includes a comprehensive test suite with **59 tests**:
+The project includes a comprehensive test suite with **71 tests**:
 
 ```bash
 # Run all tests
@@ -312,11 +334,13 @@ Test coverage includes:
 - **Parser**: Syntax parsing and AST generation (8 tests)
 - **Code Generator**: JavaScript output correctness (9 tests)
 - **Compiler**: End-to-end integration tests (8 tests)
-- **Runtime**: Execution and sandboxing (9 tests) ⭐ NEW
-- **Database**: CRUD operations (9 tests) ⭐ NEW
-- **Router**: Page routing and matching (9 tests) ⭐ NEW
+- **Runtime**: Execution and sandboxing (9 tests)
+- **Database**: CRUD operations (9 tests)
+- **Router**: Page routing and matching (9 tests)
+- **UI Renderer**: HTML generation (6 tests) ⭐ NEW
+- **HTTP Server**: Web server functionality (6 tests) ⭐ NEW
 
-**Status: 59/59 passing (100%)**
+**Status: 71/71 passing (100%)**
 
 ## 🏗️ Architecture
 
@@ -374,21 +398,28 @@ npm run format
 - CLI tool
 - Comprehensive tests
 
-### Phase 0.2 (Current - v0.2.0-alpha) ✅
+### Phase 0.2 (Complete) ✅
 - Runtime execution with `nusa run`
 - Page declarations and routing
 - Data loading keyword
 - Mock database with CRUD
 - Router system
 - Standard library foundation
-- 59 passing tests
 
-### Phase 0.3 (Next - 2-3 weeks)
+### Phase 0.3 (Current - v0.3.0-alpha) ✅
+- HTTP server with `nusa dev`
+- UI rendering from AST nodes
+- Build system with `nusa build`
+- Auto-routing for pages
+- JSON API responses
+- 71 passing tests
+
+### Phase 0.4 (Next - 2-3 weeks)
+- Real database (SQLite/PostgreSQL)
 - Member expressions (`object.property`)
-- UI block rendering (HTML/JSX)
-- Real HTTP server (Express/Fastify)
-- Database integration (PostgreSQL/SQLite)
-- Hot reload and source maps
+- `@route` annotations
+- File watching / hot reload
+- WebSocket support
 - Array and object literals
 - Template literals
 
@@ -412,16 +443,16 @@ Contributions are welcome! Please ensure:
 
 ## 🐛 Known Limitations
 
-**Phase 0.2 Limitations:**
-- No member expressions (`.` operator) - Phase 0.3
-- No UI block rendering - Phase 0.3
-- No HTTP server for pages - Phase 0.3
-- No array/object literals - Phase 0.3
-- No template literals - Phase 0.3
-- Mock database only (no persistence) - Phase 0.3
-- `data` is now a reserved keyword
+**Phase 0.3 Limitations:**
+- No member expressions (`.` operator) - Phase 0.4
+- No real database (mock only) - Phase 0.4
+- No file watching / hot reload - Phase 0.4
+- No array/object literals - Phase 0.4
+- No template literals - Phase 0.4
+- No `@route` annotations - Phase 0.4
+- `data` is a reserved keyword
 
-**Note:** All Phase 0.1 features remain fully functional.
+**Note:** All Phase 0.1 and 0.2 features remain fully functional.
 
 ## 🙏 Acknowledgments
 

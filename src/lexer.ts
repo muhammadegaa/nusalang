@@ -26,6 +26,8 @@ export const Plus = createToken({ name: 'Plus', pattern: /\+/ });
 export const Minus = createToken({ name: 'Minus', pattern: /-/ });
 export const Multiply = createToken({ name: 'Multiply', pattern: /\*/ });
 export const Divide = createToken({ name: 'Divide', pattern: /\// });
+export const JSXSelfClose = createToken({ name: 'JSXSelfClose', pattern: /\/>/ });
+export const JSXClose = createToken({ name: 'JSXClose', pattern: /<\// });
 export const GreaterThan = createToken({ name: 'GreaterThan', pattern: />/ });
 export const LessThan = createToken({ name: 'LessThan', pattern: /</ });
 
@@ -102,6 +104,8 @@ export const allTokens: TokenType[] = [
   // Operators (multi-char first)
   Pipeline,
   Arrow,
+  JSXSelfClose,
+  JSXClose,
   Equals,
   Plus,
   Minus,

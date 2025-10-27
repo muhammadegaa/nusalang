@@ -1,7 +1,7 @@
 {
   "name": "nusalang",
-  "version": "0.2.0-alpha.0",
-  "description": "NusaLang - A programming language with runtime execution and declarative data loading",
+  "version": "0.3.0-alpha",
+  "description": "NusaLang - A programming language with HTTP server, UI rendering, and full-stack capabilities",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

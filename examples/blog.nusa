@@ -1,0 +1,35 @@
+// Simple Blog Example
+// Demonstrates: Pages, data loading, basic CRUD simulation
+
+async fn getAllPosts() {
+  let count = 5;
+  return count;
+}
+
+async fn getPost(id) {
+  let postId = id;
+  let title = "My First Post";
+  return postId;
+}
+
+page "/blog" {
+  data posts = await getAllPosts();
+  let title = "Blog Home";
+  
+  return posts;
+}
+
+page "/blog/post" {
+  let post = await getPost(1);
+  return post;
+}
+
+page "/api/posts" {
+  let posts = await getAllPosts();
+  return posts;
+}
+
+fn main() {
+  return "Blog loaded";
+}
+

@@ -1,0 +1,38 @@
+// API Demo Example
+// Demonstrates: @api annotations, HTTP endpoints, JSON responses
+
+@api
+async fn getUser(id) {
+  let userId = id;
+  let userName = "Alice";
+  
+  return userId;
+}
+
+@api
+fn listUsers() {
+  let count = 10;
+  return count;
+}
+
+page "/api/user" {
+  let user = await getUser(123);
+  return user;
+}
+
+page "/api/users" {
+  let users = listUsers();
+  return users;
+}
+
+page "/api/health" {
+  let status = "healthy";
+  let uptime = 3600;
+  
+  return status;
+}
+
+fn main() {
+  return "API Demo loaded";
+}
+

@@ -1,0 +1,35 @@
+// Dashboard HTTP Server Example
+// Demonstrates: HTTP server, multiple pages, async data
+
+async fn loadMetrics() {
+  let totalUsers = 1500;
+  let activeUsers = 342;
+  let revenue = 98750;
+  
+  return totalUsers;
+}
+
+page "/dashboard" {
+  data metrics = await loadMetrics();
+  
+  let html = "Dashboard Page";
+  return html;
+}
+
+page "/api/metrics" {
+  let users = 1500;
+  let active = 342;
+  
+  return users;
+}
+
+page "/users" {
+  let userCount = 150;
+  let message = "User Management";
+  return userCount;
+}
+
+fn main() {
+  return "Dashboard loaded";
+}
+

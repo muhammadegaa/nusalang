@@ -7,8 +7,10 @@
 
 import { Command } from 'commander';
 import * as fs from 'fs';
+import * as path from 'path';
 import { compile } from './compiler.js';
 import { execute } from './runtime/execute.js';
+import { startDevServer } from './runtime/server.js';
 
 const program = new Command();
 
@@ -47,6 +49,109 @@ program
   .option('--no-router', 'Disable router module')
   .action(async (inputFile: string, options: any) => {
     await runFile(inputFile, options);
+  });
+
+// Dev server command
+program
+  .command('dev')
+  .description('Start development server with hot reload')
+  .argument('[input]', 'Input .nusa file to serve (optional)')
+  .option('-p, --port <port>', 'Port number', '3000')
+  .option('-H, --host <host>', 'Host address', 'localhost')
+  .option('--no-reload', 'Disable hot reload')
+  .action(async (inputFile: string | undefined, options: any) => {
+    const port = parseInt(options.port, 10);
+    const host = options.host;
+    
+    console.log('🚀 Starting NusaLang development server...\n');
+    
+    // If input file provided, compile and execute it first
+    if (inputFile) {
+      try {
+        console.log(`📦 Loading ${inputFile}...`);
+        const source = fs.readFileSync(inputFile, 'utf-8');
+        const result = await compile(source);
+        
+        if (!result.success) {
+          console.error('❌ Compilation failed:', result.errors);
+          process.exit(1);
+        }
+        
+        // Execute to register pages/routes
+        await execute(result.code!, {
+          enableRouter: true,
+          enableDb: true,
+        });
+        
+        console.log('✅ Application loaded\n');
+      } catch (error) {
+        console.error('❌ Error loading application:', (error as Error).message);
+        process.exit(1);
+      }
+    }
+    
+    const server = await startDevServer({
+      port,
+      host,
+      hotReload: options.reload !== false,
+    });
+    
+    // Handle graceful shutdown
+    process.on('SIGINT', async () => {
+      console.log('\n\n🛑 Shutting down server...');
+      await server.stop();
+      process.exit(0);
+    });
+  });
+
+// Build command
+program
+  .command('build')
+  .description('Build static output from .nusa files')
+  .argument('[input]', 'Input .nusa file or directory')
+  .option('-o, --output <dir>', 'Output directory', './dist')
+  .option('--html', 'Generate static HTML files')
+  .action(async (inputPath: string | undefined, options: any) => {
+    console.log('🔨 Building NusaLang project...\n');
+    
+    const outputDir = options.output;
+    const input = inputPath || '.';
+    
+    // Create output directory
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    
+    try {
+      // Find all .nusa files
+      const files = findNusaFiles(input);
+      
+      console.log(`📦 Found ${files.length} file(s) to compile\n`);
+      
+      for (const file of files) {
+        console.log(`  ⚙️  Compiling ${file}...`);
+        
+        const source = fs.readFileSync(file, 'utf-8');
+        const result = await compile(source);
+        
+        if (!result.success) {
+          console.error(`    ❌ Failed: ${result.errors}`);
+          continue;
+        }
+        
+        // Write compiled JS
+        const baseName = path.basename(file, '.nusa');
+        const jsPath = path.join(outputDir, `${baseName}.js`);
+        fs.writeFileSync(jsPath, result.code!);
+        
+        console.log(`    ✅ Generated ${jsPath}`);
+      }
+      
+      console.log(`\n✅ Build complete! Output in ${outputDir}/`);
+    } catch (error) {
+      console.error('❌ Build failed:', (error as Error).message);
+      process.exit(1);
+    }
   });
 
 // Default command (for backward compatibility)
@@ -168,6 +273,36 @@ async function runFile(inputFile: string, options: any) {
     console.error('❌ Unexpected error:', error);
     process.exit(1);
   }
+}
+
+/**
+ * Find all .nusa files in a directory or return single file
+ */
+function findNusaFiles(inputPath: string): string[] {
+  const stat = fs.statSync(inputPath);
+  
+  if (stat.isFile()) {
+    return [inputPath];
+  }
+  
+  if (stat.isDirectory()) {
+    const files: string[] = [];
+    const entries = fs.readdirSync(inputPath, { withFileTypes: true });
+    
+    for (const entry of entries) {
+      const fullPath = path.join(inputPath, entry.name);
+      
+      if (entry.isDirectory()) {
+        files.push(...findNusaFiles(fullPath));
+      } else if (entry.isFile() && entry.name.endsWith('.nusa')) {
+        files.push(fullPath);
+      }
+    }
+    
+    return files;
+  }
+  
+  return [];
 }
 
 program.parse();
