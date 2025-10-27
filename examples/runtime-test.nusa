@@ -1,0 +1,9 @@
+// Simple runtime test
+// Tests basic execution with db and console
+
+fn main() {
+  let message = "Hello from NusaLang Runtime!";
+  let numbers = 10 + 32;
+  return numbers;
+}
+

@@ -1,0 +1,28 @@
+// Database Query Example
+// Demonstrates: data declarations, async functions, page routes
+// Note: Member expressions will be supported in Phase 0.3
+
+async fn loadUsers() {
+  let count = 150;
+  return count;
+}
+
+async fn createUser(name) {
+  let userId = 42;
+  return userId;
+}
+
+page "/api/users" {
+  data users = await loadUsers();
+  return users;
+}
+
+page "/api/create" {
+  let newUser = await createUser("Alice");
+  return newUser;
+}
+
+fn main() {
+  return loadUsers();
+}
+

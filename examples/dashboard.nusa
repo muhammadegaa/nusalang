@@ -1,0 +1,22 @@
+// Dashboard Example
+// Demonstrates: data loading, async operations, page routes
+
+data metrics = await loadMetrics();
+
+fn loadMetrics() {
+  return 42;
+}
+
+page "/dashboard" {
+  let totalUsers = 1500;
+  let activeUsers = 342;
+  let growthRate = totalUsers + activeUsers;
+  
+  return growthRate;
+}
+
+page "/users" {
+  let userCount = 100;
+  return userCount;
+}
+

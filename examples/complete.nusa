@@ -1,0 +1,42 @@
+// Complete example combining all features
+// Demonstrates: imports, async/await, pipelines, @api, variables
+
+import { authenticate, fetchData } from "auth"
+
+fn validateInput(input) {
+  return input;
+}
+
+fn sanitize(data) {
+  return data;
+}
+
+fn transform(data) {
+  return data;
+}
+
+@api
+async fn processRequest(requestId) {
+  // Validate and sanitize input
+  let validated = validateInput(requestId);
+  let clean = validated |> sanitize |> transform;
+  
+  // Fetch data
+  let data = await fetchData(clean);
+  
+  // Process result
+  const processed = processData(data);
+  return processed;
+}
+
+fn processData(data) {
+  let result = data + 100;
+  return result;
+}
+
+async fn main() {
+  let token = await authenticate("user123");
+  let result = await processRequest(42);
+  return result;
+}
+

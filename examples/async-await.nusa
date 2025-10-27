@@ -1,0 +1,21 @@
+// Async/Await example
+// Demonstrates: async functions, await expressions, imports
+
+import { fetchData, processData } from "data-utils"
+
+async fn getData(url) {
+  let response = await fetchData(url);
+  return response;
+}
+
+async fn processAndFetch(url) {
+  let data = await getData(url);
+  let processed = await processData(data);
+  return processed;
+}
+
+fn main() {
+  const url = "https://api.example.com/data";
+  return processAndFetch(url);
+}
+

@@ -1,0 +1,66 @@
+# NusaLang Development Rules
+
+## Project Overview
+NusaLang is a programming language compiler (Phase 0.1) that transpiles .nusa files to JavaScript.
+Built with TypeScript, Chevrotain parser, and follows clean architecture principles.
+
+## Architecture
+- **Lexer** (lexer.ts): Tokenizes source using Chevrotain
+- **Parser** (parser.ts): CST → AST conversion
+- **Codegen** (codegen.ts): AST → JavaScript
+- **Compiler** (compiler.ts): Orchestrates pipeline
+- **CLI** (cli.ts): Command-line interface
+
+## Code Standards
+1. **TypeScript**: Strict mode enabled, explicit types preferred
+2. **Formatting**: Prettier with 2-space indentation, 100 char line width
+3. **Testing**: Vitest for all new features, maintain test coverage
+4. **Naming**: PascalCase for types/classes, camelCase for functions/variables
+5. **Exports**: Use named exports, avoid default exports
+
+## Adding New Features
+1. Update AST types in `ast.ts`
+2. Add tokens to lexer (`lexer.ts`)
+3. Implement parser rule (`parser.ts`)
+4. Add CST-to-AST converter
+5. Implement code generation (`codegen.ts`)
+6. Write comprehensive tests
+7. Add example in `examples/`
+8. Update README.md
+
+## Testing Requirements
+- All parser rules must have tests
+- All code generation paths must have tests
+- Integration tests for complete programs
+- Test both success and error cases
+
+## Known Limitations (Phase 0.1)
+- No member expressions (object.property)
+- No array/object literals
+- No template literals
+- Simple operator precedence
+- No type checking
+
+## Git Workflow
+- Never commit untested code
+- Run `npm test` before committing
+- Keep commits focused and atomic
+- Write descriptive commit messages
+
+## Error Handling
+- Lexer errors: Clear token position
+- Parser errors: Expected vs found
+- Compiler errors: Line/column information
+- All errors should be user-friendly
+
+## Performance Considerations
+- Lexer and parser are fast (Chevrotain optimized)
+- Code generation is synchronous
+- Prettier formatting may be slow for large files
+- Consider caching for watch mode
+
+## Future Phases
+- Phase 0.2: Member expressions, literals, type annotations
+- Phase 0.3: Native @api generation, database integrations
+- See README.md Roadmap for details
+

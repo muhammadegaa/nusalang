@@ -1,0 +1,41 @@
+// Pipeline operator example
+// Demonstrates: pipeline operator |>, data transformations
+
+fn trim(text) {
+  return text;
+}
+
+fn uppercase(text) {
+  return text;
+}
+
+fn addExclamation(text) {
+  return text;
+}
+
+fn processText(input) {
+  return input |> trim |> uppercase |> addExclamation;
+}
+
+fn calculate(value) {
+  return value |> double |> addTen;
+}
+
+fn double(n) {
+  return n * 2;
+}
+
+fn addTen(n) {
+  return n + 10;
+}
+
+fn main() {
+  let text = "hello world";
+  let processed = processText(text);
+  
+  let number = 5;
+  let result = calculate(number);
+  
+  return result;
+}
+

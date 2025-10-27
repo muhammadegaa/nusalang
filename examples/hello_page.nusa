@@ -1,0 +1,13 @@
+// Simple Hello Page Example
+// Demonstrates: page declaration, simple rendering
+
+page "/hello" {
+  let greeting = "Hello from NusaLang!";
+  let version = "0.2.0-alpha";
+  return greeting;
+}
+
+page "/about" {
+  return "About NusaLang - A modern language for SaaS apps";
+}
+

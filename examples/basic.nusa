@@ -1,0 +1,17 @@
+// Basic NusaLang example
+// Demonstrates: functions, variables, binary expressions
+
+fn add(x, y) {
+  return x + y;
+}
+
+fn multiply(a, b) {
+  return a * b;
+}
+
+fn main() {
+  let result = add(5, 3);
+  const doubled = multiply(result, 2);
+  return doubled;
+}
+

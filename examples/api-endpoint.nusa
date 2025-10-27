@@ -1,0 +1,28 @@
+// API endpoint example
+// Demonstrates: @api annotation, async functions, imports
+
+import { validateUser, findUser, createUser } from "database"
+
+@api
+async fn getUser(id) {
+  let user = await findUser(id);
+  return user;
+}
+
+@api
+async fn createNewUser(name, email) {
+  let validated = await validateUser(name, email);
+  let user = await createUser(validated);
+  return user;
+}
+
+@api
+fn listUsers() {
+  return getAllUsers();
+}
+
+fn getAllUsers() {
+  const users = "mock-users";
+  return users;
+}
+
