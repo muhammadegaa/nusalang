@@ -2,17 +2,21 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.4 (v0.4.0-alpha)** - Developer experience and declarative routing platform.
+**Current Version: Phase 0.5 (v0.5.0-alpha)** - Language completeness with template literals and configuration.
 
 ## ✨ Features
 
-### Phase 0.4 (v0.4.0-alpha) - Developer Experience & Routing 🚀
+### Phase 0.5 (v0.5.0-alpha) - Template Literals & Configuration 🎉
+- ✅ **Template Literals**: Full support for `` `Hello, ${name}!` `` with interpolation
+- ✅ **`.nusarc` Configuration**: Project-level config file with validation
+- ✅ **Config Runtime Access**: Use `config.port`, `config.db` in your code
+- ✅ **154 Tests**: Comprehensive test coverage including new features
+- ✅ **3 New Examples**: Template demo, config demo, Phase 0.5 showcase
+
+### Phase 0.4 - Developer Experience & Routing
 - ✅ **@route Annotations**: Declarative HTTP routing with `@route("/path")`
 - ✅ **Hot Reload**: Automatic recompilation on file changes with `--watch`
 - ✅ **Database Persistence**: JSON file-based storage with adapters
-- ✅ **Better CLI**: Improved output with timestamps and colors
-- ✅ **SQLite Support**: Production-ready database adapter
-- ✅ **Route Registration**: Auto-expose functions as HTTP endpoints
 
 ### Phase 0.3 - HTTP Server & UI Platform
 - ✅ HTTP Server with `nusa dev`, UI Rendering, Build System
@@ -46,33 +50,48 @@ npm test
 
 ## 🎯 Quick Start
 
-### Runtime Example (Phase 0.2)
+### Phase 0.5 Example - Template Literals & Config
 
-Create a file `myapp.nusa`:
+Create a file `.nusarc`:
+
+```json
+{
+  "port": 4000,
+  "db": "sqlite",
+  "hotReload": true,
+  "logLevel": "info"
+}
+```
+
+Create a file `app.nusa`:
 
 ```nusa
-page "/home" {
-  let greeting = "Hello from NusaLang!";
-  return greeting;
+fn greet(name, age) {
+  let message = `Hello, ${name}! You are ${age} years old.`;
+  return message;
 }
 
-page "/api/status" {
-  data config = await loadConfig();
-  return config;
-}
-
-async fn loadConfig() {
-  return 42;
+page "/demo" {
+  let greeting = greet("Alice", 27);
+  let appInfo = `Running on port ${config.port} with ${config.db} database`;
+  
+  ui {
+    <div>
+      <h1>Phase 0.5 Demo</h1>
+      <p>{greeting}</p>
+      <p>{appInfo}</p>
+    </div>
+  }
 }
 ```
 
 Run it:
 
 ```bash
-node dist/cli.js run myapp.nusa
+node dist/cli.js dev app.nusa --config .nusarc
 ```
 
-### Compiler Example (Phase 0.1)
+### Runtime Example (Phase 0.2)
 
 Create a file `hello.nusa`:
 
@@ -404,19 +423,30 @@ npm run format
 - Router system
 - Standard library foundation
 
-### Phase 0.3 (Current - v0.3.0-alpha) ✅
+### Phase 0.3 (Complete) ✅
 - HTTP server with `nusa dev`
 - UI rendering from AST nodes
 - Build system with `nusa build`
 - Auto-routing for pages
 - JSON API responses
-- 71 passing tests
 
-### Phase 0.4 (Next - 2-3 weeks)
-- Real database (SQLite/PostgreSQL)
-- Member expressions (`object.property`)
-- `@route` annotations
-- File watching / hot reload
+### Phase 0.4 (Complete) ✅
+- `@route` annotations for declarative HTTP routing
+- File watching / hot reload with `--watch`
+- Database persistence (JSON file-based)
+- Route auto-registration
+
+### Phase 0.5 (Current - v0.5.0-alpha) ✅
+- **Template Literals**: `` `Hello, ${name}!` `` with interpolation
+- **`.nusarc` Configuration**: Project config file system
+- **Config Runtime Access**: Use config in your NusaLang code
+- **154 Tests**: Up from 142 in Phase 0.4
+- **3 New Examples**: Template, config, and Phase 0.5 demos
+
+### Phase 0.6 (Next - 2-3 weeks)
+- Member expressions (`object.property`, `array[index]`)
+- Array and object literals (`[1, 2, 3]`, `{key: value}`)
+- Parser redesign for complex expressions
 - WebSocket support
 - Array and object literals
 - Template literals

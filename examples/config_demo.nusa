@@ -1,0 +1,29 @@
+// Configuration Demo
+// Demonstrates: Using .nusarc config in runtime
+
+fn getAppInfo() {
+  let port = config.port;
+  let dbType = config.db;
+  let hotReload = config.hotReload;
+  return `Running on port ${port} with ${dbType} database. Hot reload: ${hotReload}`;
+}
+
+fn getDatabaseConfig() {
+  let db = config.db;
+  return `Current database adapter: ${db}`;
+}
+
+page "/config-demo" {
+  let appInfo = getAppInfo();
+  let dbInfo = getDatabaseConfig();
+  
+  ui {
+    <div>
+      <h1>Configuration Demo</h1>
+      <p>{appInfo}</p>
+      <p>{dbInfo}</p>
+      <p>Log level: {config.logLevel}</p>
+    </div>
+  }
+}
+

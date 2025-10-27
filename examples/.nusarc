@@ -1,0 +1,9 @@
+{
+  "port": 4000,
+  "db": "sqlite",
+  "hotReload": true,
+  "logLevel": "debug",
+  "outDir": "./dist",
+  "sourceDir": "./examples"
+}
+

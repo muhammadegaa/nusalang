@@ -191,6 +191,11 @@ export class CodeGenerator {
   }
 
   private generateLiteral(node: LiteralNode): string {
+    // Check if it's a template literal (starts with backtick)
+    if (typeof node.raw === 'string' && node.raw.startsWith('`')) {
+      // Template literal - return as-is (JS supports template literals natively)
+      return node.raw;
+    }
     if (typeof node.value === 'string') {
       return `'${node.value}'`;
     }

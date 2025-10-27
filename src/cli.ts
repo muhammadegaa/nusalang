@@ -13,6 +13,7 @@ import { compile } from './compiler.js';
 import { execute } from './runtime/execute.js';
 import { startDevServer } from './runtime/server.js';
 import { router } from './runtime/router.js';
+import { loadConfig, validateConfig } from './config.js';
 
 const program = new Command();
 
@@ -58,14 +59,25 @@ program
   .command('dev')
   .description('Start development server with hot reload')
   .argument('[input]', 'Input .nusa file to serve (optional)')
-  .option('-p, --port <port>', 'Port number', '3000')
-  .option('-H, --host <host>', 'Host address', 'localhost')
+  .option('-p, --port <port>', 'Port number')
+  .option('-H, --host <host>', 'Host address')
   .option('--no-reload', 'Disable hot reload')
   .option('--watch', 'Enable file watching (hot reload)')
+  .option('-c, --config <path>', 'Path to .nusarc config file')
   .action(async (inputFile: string | undefined, options: any) => {
-    const port = parseInt(options.port, 10);
-    const host = options.host;
-    const watchEnabled = options.watch || options.reload !== false;
+    // Load configuration
+    const config = loadConfig(options.config);
+    const configErrors = validateConfig(config);
+    
+    if (configErrors.length > 0) {
+      console.error('❌ Configuration errors:');
+      configErrors.forEach(err => console.error(`   - ${err}`));
+      process.exit(1);
+    }
+    
+    const port = options.port ? parseInt(options.port, 10) : config.port!;
+    const host = options.host || 'localhost';
+    const watchEnabled = options.watch || (config.hotReload && options.reload !== false);
     
     console.log('🚀 Starting NusaLang development server...\n');
     
@@ -89,6 +101,7 @@ program
           await execute(result.code!, {
             enableRouter: true,
             enableDb: true,
+            config: config,
           });
           
           console.log(`✅ Application ${watchEnabled ? 'reloaded' : 'loaded'} at ${new Date().toLocaleTimeString()}\n`);

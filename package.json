@@ -1,7 +1,7 @@
 {
   "name": "nusalang",
-  "version": "0.4.0-alpha",
-  "description": "NusaLang - A programming language with declarative routing, hot reload, and persistent database",
+  "version": "0.5.0-alpha",
+  "description": "NusaLang - A programming language with template literals, configuration system, and full-stack capabilities",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -20,19 +20,12 @@
     "compiler",
     "transpiler",
     "programming-language",
-    "nusalang"
+    "nusalang",
+    "template-literals",
+    "configuration"
   ],
   "author": "",
   "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.0",
-    "@typescript-eslint/parser": "^6.13.0",
-    "eslint": "^8.54.0",
-    "prettier": "^3.1.0",
-    "typescript": "^5.3.2",
-    "vitest": "^1.0.4"
-  },
   "dependencies": {
     "chevrotain": "^11.0.3",
     "chokidar": "^3.5.3",

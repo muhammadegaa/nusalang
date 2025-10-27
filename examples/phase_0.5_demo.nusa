@@ -1,0 +1,31 @@
+// Phase 0.5 Complete Demo
+// Demonstrates: Template literals + Config integration
+
+@route("/api/app-status")
+async fn getAppStatus() {
+  let status = `NusaLang v0.5.0-alpha running on port ${config.port}`;
+  return status;
+}
+
+fn buildWelcomeMessage(name) {
+  let greeting = `Welcome to NusaLang, ${name}!`;
+  let features = `Phase 0.5 includes:
+- Template literals with interpolation
+- .nusarc configuration system
+- Hot reload and routing`;
+  return `${greeting}\n${features}`;
+}
+
+page "/phase-0.5" {
+  let message = buildWelcomeMessage("Developer");
+  
+  ui {
+    <div>
+      <h1>NusaLang Phase 0.5</h1>
+      <pre>{message}</pre>
+      <p>Database: {config.db}</p>
+      <p>Hot Reload: {config.hotReload}</p>
+    </div>
+  }
+}
+

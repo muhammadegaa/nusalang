@@ -1,0 +1,43 @@
+// Template Literals Demo
+// Demonstrates: Template literal syntax with interpolation
+
+fn greet(name, age) {
+  let greeting = `Hello, ${name}! You are ${age} years old.`;
+  return greeting;
+}
+
+fn formatUser(firstName, lastName) {
+  let fullName = `${firstName} ${lastName}`;
+  let message = `Welcome, ${fullName}!`;
+  return message;
+}
+
+fn calculateSum(a, b) {
+  let result = `The sum of ${a} and ${b} is ${a + b}`;
+  return result;
+}
+
+fn multilineMessage() {
+  let message = `This is a 
+multiline template literal
+that spans multiple lines`;
+  return message;
+}
+
+page "/template-demo" {
+  let user1 = greet("Alice", 27);
+  let user2 = formatUser("Bob", "Smith");
+  let calc = calculateSum(10, 32);
+  let multiline = multilineMessage();
+  
+  ui {
+    <div>
+      <h1>Template Literals Demo</h1>
+      <p>{user1}</p>
+      <p>{user2}</p>
+      <p>{calc}</p>
+      <pre>{multiline}</pre>
+    </div>
+  }
+}
+

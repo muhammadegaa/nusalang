@@ -47,6 +47,11 @@ export const StringLiteral = createToken({
   name: 'StringLiteral',
   pattern: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/,
 });
+export const TemplateLiteral = createToken({
+  name: 'TemplateLiteral',
+  pattern: /`(?:[^`\\]|\\.)*`/,
+  line_breaks: true,
+});
 export const NumberLiteral = createToken({
   name: 'NumberLiteral',
   pattern: /\d+(\.\d+)?/,
@@ -126,8 +131,10 @@ export const allTokens: TokenType[] = [
   At,
   
   // Literals
+  TemplateLiteral,
   StringLiteral,
   NumberLiteral,
+  BooleanLiteral,
   
   // Identifier must be last after all keywords
   Identifier,

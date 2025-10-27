@@ -23,6 +23,7 @@ export interface ExecutionOptions {
   context?: ExecutionContext;
   enableRouter?: boolean;
   enableDb?: boolean;
+  config?: Record<string, any>;
 }
 
 /**
@@ -37,6 +38,7 @@ export async function execute(
     context = {},
     enableRouter = true,
     enableDb = true,
+    config,
   } = options;
 
   try {
@@ -59,6 +61,11 @@ export async function execute(
     if (enableRouter) {
       sandbox.router = router;
       sandbox.page = router.registerPage.bind(router);
+    }
+
+    // Expose config if provided
+    if (config) {
+      sandbox.config = config;
     }
 
     // Track exports

@@ -270,6 +270,7 @@ class NusaParser extends CstParser {
 
   private literal = this.RULE('literal', () => {
     return this.OR([
+      { ALT: () => this.CONSUME(tokens.TemplateLiteral) },
       { ALT: () => this.CONSUME(tokens.StringLiteral) },
       { ALT: () => this.CONSUME(tokens.NumberLiteral) },
       { ALT: () => this.CONSUME(tokens.BooleanLiteral) },
@@ -674,7 +675,11 @@ function convertLiteral(children: any): LiteralNode {
   let token: IToken;
   let value: any;
 
-  if (children.StringLiteral) {
+  if (children.TemplateLiteral) {
+    token = children.TemplateLiteral[0];
+    // Keep template literal as-is with backticks for codegen to handle interpolation
+    value = token.image;
+  } else if (children.StringLiteral) {
     token = children.StringLiteral[0];
     value = token.image.slice(1, -1); // Remove quotes
   } else if (children.NumberLiteral) {
