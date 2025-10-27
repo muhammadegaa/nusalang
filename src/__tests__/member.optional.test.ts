@@ -7,9 +7,8 @@ import { describe, it, expect } from 'vitest';
 import { compile } from '../compiler.js';
 import { execute } from '../runtime/execute.js';
 
-// Deferred to Phase 1.2 - Requires Chevrotain grammar refactor
-// Foundation complete (Pratt parser + bridge), integration pending
-describe.skip('Optional Chaining', () => {
+// Phase 1.2 - Chevrotain grammar extended with member access support
+describe('Optional Chaining', () => {
   describe('Optional Member Access (?.)', () => {
     it('should parse optional member access', async () => {
       const input = `
@@ -42,6 +41,7 @@ describe.skip('Optional Chaining', () => {
           let name = user?.name;
           return name;
         }
+        main()
       `;
       const compiled = await compile(input);
       expect(compiled.success).toBe(true);
@@ -67,13 +67,15 @@ describe.skip('Optional Chaining', () => {
       expect(execResult.result).toBe(undefined);
     });
 
-    it('should execute deep optional chaining', async () => {
+    // Deferred to Phase 1.3 - requires chained optional member parsing
+    it.skip('should execute deep optional chaining', async () => {
       const input = `
         fn main() {
           let data = { user: { profile: { email: "test@example.com" } } };
           let email = data?.user?.profile?.email;
           return email;
         }
+        main()
       `;
       const compiled = await compile(input);
       expect(compiled.success).toBe(true);
@@ -84,7 +86,8 @@ describe.skip('Optional Chaining', () => {
     });
   });
 
-  describe('Optional Computed Access (?[])', () => {
+  // Deferred to Phase 1.3 - requires Pratt parser enhancements
+  describe.skip('Optional Computed Access (?[])', () => {
     it('should parse optional computed member access', async () => {
       const input = `
         fn test() {
@@ -130,7 +133,8 @@ describe.skip('Optional Chaining', () => {
     });
   });
 
-  describe('Mixed Optional Chaining', () => {
+  // Deferred to Phase 1.3 - requires deep chaining support
+  describe.skip('Mixed Optional Chaining', () => {
     it('should mix optional and regular member access', async () => {
       const input = `
         fn test() {
@@ -193,7 +197,8 @@ describe.skip('Optional Chaining', () => {
     });
   });
 
-  describe('Optional Chaining with Operators', () => {
+  // Deferred to Phase 1.3 - requires integration with pipeline/binary expressions
+  describe.skip('Optional Chaining with Operators', () => {
     it('should work with pipeline operator', async () => {
       const input = `
         fn getId(x) {

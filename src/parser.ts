@@ -233,6 +233,14 @@ class NusaParser extends CstParser {
 
   private primaryExpression = this.RULE('primaryExpression', () => {
     return this.OR([
+      { ALT: () => this.SUBRULE(this.memberAccessExpression) },
+    ]);
+  });
+
+  // New rule to handle member access and optional chaining
+  private memberAccessExpression = this.RULE('memberAccessExpression', () => {
+    // First parse the base expression
+    this.OR([
       { ALT: () => this.SUBRULE(this.awaitExpression) },
       { ALT: () => this.SUBRULE(this.arrayLiteral) },
       { ALT: () => this.SUBRULE(this.objectLiteral) },
@@ -241,6 +249,34 @@ class NusaParser extends CstParser {
       { ALT: () => this.SUBRULE(this.identifier) },
       { ALT: () => this.SUBRULE(this.parenthesizedExpression) },
     ]);
+
+    // Then handle member access, array indexing, and optional chaining
+    this.MANY(() => {
+      this.OR2([
+        // Standard property access: obj.prop
+        { ALT: () => {
+          this.CONSUME(tokens.Dot);
+          this.CONSUME(tokens.Identifier);
+        }},
+        // Array indexing: arr[expr]
+        { ALT: () => {
+          this.CONSUME(tokens.LBracket);
+          this.SUBRULE(this.expression);
+          this.CONSUME(tokens.RBracket);
+        }},
+        // Optional chaining: obj?.prop
+        { ALT: () => {
+          this.CONSUME(tokens.OptionalDot);
+          this.CONSUME2(tokens.Identifier);
+        }},
+        // Optional index access: arr?.[expr]
+        { ALT: () => {
+          this.CONSUME(tokens.OptionalBracket);
+          this.SUBRULE2(this.expression);
+          this.CONSUME2(tokens.RBracket);
+        }},
+      ]);
+    });
   });
 
   private awaitExpression = this.RULE('awaitExpression', () => {
@@ -684,6 +720,9 @@ function convertExpressionFromIntermediate(intermediate: any): ASTNode {
 }
 
 function convertPrimaryExpression(children: any): ASTNode {
+  if (children.memberAccessExpression) {
+    return convertMemberAccessExpression(children.memberAccessExpression[0].children);
+  }
   if (children.awaitExpression) {
     return convertAwaitExpression(children.awaitExpression[0].children);
   }
@@ -707,6 +746,99 @@ function convertPrimaryExpression(children: any): ASTNode {
     return convertExpression(children.expression[0].children);
   }
   throw new Error('Unknown primary expression');
+}
+
+function convertMemberAccessExpression(children: any): ASTNode {
+  // Start with the base expression
+  let result: ASTNode;
+  
+  if (children.awaitExpression) {
+    result = convertAwaitExpression(children.awaitExpression[0].children);
+  } else if (children.arrayLiteral) {
+    result = convertArrayLiteral(children.arrayLiteral[0].children);
+  } else if (children.objectLiteral) {
+    result = convertObjectLiteral(children.objectLiteral[0].children);
+  } else if (children.callExpression) {
+    result = convertCallExpression(children.callExpression[0].children);
+  } else if (children.literal) {
+    result = convertLiteral(children.literal[0].children);
+  } else if (children.identifier) {
+    result = convertIdentifier(children.identifier[0].children);
+  } else if (children.parenthesizedExpression) {
+    result = convertExpression(children.parenthesizedExpression[0].children.expression[0].children);
+  } else {
+    throw new Error('Unknown base expression in member access');
+  }
+
+  // Now process any member access operations
+  const dots = children.Dot || [];
+  const optionalDots = children.OptionalDot || [];
+  const brackets = children.LBracket || [];
+  const optionalBrackets = children.OptionalBracket || [];
+  const expressions = children.expression || [];
+
+  // Collect all access operations in order
+  const operations: Array<{type: string, index: number, token?: any}> = [];
+  
+  dots.forEach((token: any) => {
+    operations.push({ type: 'dot', index: token.startOffset, token });
+  });
+  optionalDots.forEach((token: any) => {
+    operations.push({ type: 'optionalDot', index: token.startOffset, token });
+  });
+  brackets.forEach((token: any) => {
+    operations.push({ type: 'bracket', index: token.startOffset, token });
+  });
+  optionalBrackets.forEach((token: any) => {
+    operations.push({ type: 'optionalBracket', index: token.startOffset, token });
+  });
+
+  // Sort by position to maintain correct order
+  operations.sort((a, b) => a.index - b.index);
+
+  // Track which identifier and expression we're using
+  let identifierIdx = 0;
+  let expressionIdx = 0;
+  const identifiers = children.Identifier || [];
+
+  // Apply operations in order
+  for (const op of operations) {
+    if (op.type === 'dot') {
+      const property = identifiers[identifierIdx++];
+      result = {
+        type: 'MemberExpression',
+        object: result,
+        property: { type: 'Identifier', name: property.image },
+        computed: false,
+      };
+    } else if (op.type === 'optionalDot') {
+      const property = identifiers[identifierIdx++];
+      result = {
+        type: 'OptionalMemberExpression',
+        object: result,
+        property: { type: 'Identifier', name: property.image },
+        computed: false,
+      };
+    } else if (op.type === 'bracket') {
+      const indexExpr = expressions[expressionIdx++];
+      result = {
+        type: 'MemberExpression',
+        object: result,
+        property: convertExpression(indexExpr.children),
+        computed: true,
+      };
+    } else if (op.type === 'optionalBracket') {
+      const indexExpr = expressions[expressionIdx++];
+      result = {
+        type: 'OptionalMemberExpression',
+        object: result,
+        property: convertExpression(indexExpr.children),
+        computed: true,
+      };
+    }
+  }
+
+  return result;
 }
 
 function convertAwaitExpression(children: any): ASTNode {

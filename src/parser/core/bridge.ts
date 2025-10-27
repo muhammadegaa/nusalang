@@ -25,9 +25,9 @@ export function extractTokensFromCst(cstNode: any): IToken[] {
     
     // It's a CST node with children property
     if (node.children && typeof node.children === 'object') {
-      // Sort keys to ensure consistent traversal order
-      // Chevrotain uses lexicographical order for rule names
-      const keys = Object.keys(node.children).sort();
+      // DO NOT SORT! Preserve insertion order to maintain parse order
+      // Modern JavaScript (ES2015+) guarantees object key insertion order
+      const keys = Object.keys(node.children);
       
       for (const key of keys) {
         const child = node.children[key];
@@ -53,6 +53,18 @@ export function extractTokensFromCst(cstNode: any): IToken[] {
   }
   
   walk(cstNode);
+  
+  // Sort tokens by their source position to maintain parse order
+  // Chevrotain CST groups tokens by type, not by position
+  tokens.sort((a, b) => {
+    // Compare by startOffset (position in source code)
+    if (a.startOffset !== b.startOffset) {
+      return a.startOffset - b.startOffset;
+    }
+    // If same position, maintain stable order
+    return 0;
+  });
+  
   return tokens;
 }
 

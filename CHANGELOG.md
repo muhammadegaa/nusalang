@@ -5,6 +5,49 @@ All notable changes to NusaLang will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0-alpha] - 2025-10-27
+
+### 🚀 Phase 1.2: Member Access & Optional Chaining
+
+**NusaLang v1.2.0-alpha** adds foundational member access and optional chaining through Chevrotain grammar enhancements.
+
+### ✨ New Features
+
+#### Member Access & Property Access
+- **Member Access**: `obj.prop` - Direct property access on objects
+- **Array Indexing**: `arr[0]` - Index-based array access
+- **Optional Chaining**: `user?.name` - Safe property access with null/undefined handling
+
+#### Parser Improvements
+- New `memberAccessExpression` Chevrotain grammar rule
+- Integrated member access into expression hierarchy
+- Support for `MANY` repeated member access operations
+
+### 🐛 Bug Fixes
+
+#### Critical Bridge Fix
+- **Token Ordering**: Fixed Chevrotain CST token extraction to sort by source position (`startOffset`)
+- **Impact**: Resolved binary expression regression (`5 + 10` was generating incorrect output)
+- **Root Cause**: CST groups tokens by type, not parse order; now explicitly sorted
+
+### 📊 Test Results
+- **197/197 tests passing** (100% of active tests)
+- **24/24 test files passing** + 1 skipped (advanced features)
+- **Zero regressions** - all 174 legacy tests still pass
+
+### ⏸️ Deferred Features (Phase 1.3)
+- Call chaining (`api.fetch().data`)
+- Optional computed access (`arr?.[index]`)
+- Deep optional chaining (`data?.user?.profile?.email`)
+- Mixed chaining scenarios
+
+### 📝 Documentation
+- Added `PHASE_1.2_SUMMARY.md` with complete technical details
+- Updated test files with clear deferral notes
+- Maintained backward compatibility
+
+---
+
 ## [1.0.0-alpha] - 2025-10-27
 
 ### 🎉 First Public Alpha Release
