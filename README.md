@@ -2,13 +2,52 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: v1.0.0-alpha** 🎉 - First public release! Stable compiler, reactive runtime, and comprehensive documentation.
+**Current Version: v1.2.0-alpha** 🎉 - Full member access & optional chaining!
 
-> **Phase 1.1 Update**: Parser integration investigation complete. Full Pratt/Chevrotain merge deferred to Phase 1.2 (requires Chevrotain grammar refactor). See `PHASE_1.1_STATUS.md` for details.
-
-[![Tests](https://img.shields.io/badge/tests-193%20passing-brightgreen)](https://github.com/muhammadegaa/nusalang)
+[![Tests](https://img.shields.io/badge/tests-197%20passing-brightgreen)](https://github.com/muhammadegaa/nusalang)
 [![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0--alpha-orange)](https://github.com/muhammadegaa/nusalang/releases)
+[![Version](https://img.shields.io/badge/version-1.2.0--alpha-orange)](https://github.com/muhammadegaa/nusalang/releases/tag/v1.2.0-alpha)
+
+---
+
+### 🧾 **Phase 1.2 Summary — Full Member Access & Optional Chaining**
+
+| Metric          | Result                                  |
+| --------------- | --------------------------------------- |
+| **Tests**       | 197 / 197 passing (100 %)               |
+| **Test Files**  | 24 / 24 passing  (+ 1 skipped advanced) |
+| **Version**     | `v1.2.0-alpha`                          |
+| **Branch**      | `main`                                  |
+| **Regressions** | 0                                       |
+
+#### ✅ Delivered
+
+* **Member access:** `obj.prop`
+* **Array indexing:** `arr[0]`
+* **Basic optional chaining:** `user?.name`
+* **Binary expressions & pipeline ops:** fully restored
+* **Bridge fix:** tokens sorted by `startOffset`, preserving parse order
+* **Chevrotain grammar:** new `memberExpression` rule, backward-compatible
+
+#### ⚙️ Deferred → Phase 1.3
+
+* Call chaining `api.fetch().process()`
+* Deep optional chaining `data?.user?.profile?.email`
+* Optional computed access `arr?.[i]`
+
+#### 💡 Run Now
+
+```bash
+npm test                 # 197 passed, 25 skipped
+node dist/cli.js run examples/member_access.nusa
+node dist/cli.js run examples/optional_chain.nusa
+```
+
+#### 🏷️ Tag on GitHub
+
+[`v1.2.0-alpha`](https://github.com/muhammadegaa/nusalang/releases/tag/v1.2.0-alpha)
+
+---
 
 ## ✨ Features
 
