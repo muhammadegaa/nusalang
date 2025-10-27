@@ -1,0 +1,49 @@
+// Array and Object Literals Demo
+// Demonstrates: Array literals, object literals, and basic operations
+
+fn createUser(name, age, role) {
+  let user = {
+    name: name,
+    age: age,
+    role: role,
+    active: true
+  };
+  return user;
+}
+
+fn getScores() {
+  let scores = [95, 87, 92, 88, 90];
+  return scores;
+}
+
+fn createTeam() {
+  let members = [
+    { name: "Alice", role: "lead" },
+    { name: "Bob", role: "dev" },
+    { name: "Carol", role: "design" }
+  ];
+  return members;
+}
+
+fn getConfig() {
+  let config = {
+    port: 3000,
+    host: "localhost",
+    features: ["auth", "api", "ui"],
+    settings: {
+      timeout: 5000,
+      retries: 3
+    }
+  };
+  return config;
+}
+
+fn main() {
+  let user = createUser("Alice", 27, "admin");
+  let scores = getScores();
+  let team = createTeam();
+  let config = getConfig();
+  
+  return "Arrays and objects created successfully";
+}
+

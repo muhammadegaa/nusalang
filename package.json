@@ -1,7 +1,7 @@
 {
   "name": "nusalang",
-  "version": "0.5.0-alpha",
-  "description": "NusaLang - A programming language with template literals, configuration system, and full-stack capabilities",
+  "version": "0.6.0-alpha",
+  "description": "NusaLang - A programming language with arrays, objects, template literals, and full-stack capabilities",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

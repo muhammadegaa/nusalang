@@ -36,6 +36,8 @@ export const LParen = createToken({ name: 'LParen', pattern: /\(/ });
 export const RParen = createToken({ name: 'RParen', pattern: /\)/ });
 export const LBrace = createToken({ name: 'LBrace', pattern: /\{/ });
 export const RBrace = createToken({ name: 'RBrace', pattern: /\}/ });
+export const LBracket = createToken({ name: 'LBracket', pattern: /\[/ });
+export const RBracket = createToken({ name: 'RBracket', pattern: /\]/ });
 export const Comma = createToken({ name: 'Comma', pattern: /,/ });
 export const Semicolon = createToken({ name: 'Semicolon', pattern: /;/ });
 export const Colon = createToken({ name: 'Colon', pattern: /:/ });
@@ -124,6 +126,8 @@ export const allTokens: TokenType[] = [
   RParen,
   LBrace,
   RBrace,
+  LBracket,
+  RBracket,
   Comma,
   Semicolon,
   Colon,

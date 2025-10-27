@@ -22,6 +22,7 @@ import {
   PageDeclarationNode,
   DataDeclarationNode,
 } from './ast.js';
+import { parseExpressionPratt } from './parser/core/expression.js';
 
 class NusaParser extends CstParser {
   constructor() {
@@ -233,6 +234,8 @@ class NusaParser extends CstParser {
   private primaryExpression = this.RULE('primaryExpression', () => {
     return this.OR([
       { ALT: () => this.SUBRULE(this.awaitExpression) },
+      { ALT: () => this.SUBRULE(this.arrayLiteral) },
+      { ALT: () => this.SUBRULE(this.objectLiteral) },
       { ALT: () => this.SUBRULE(this.callExpression) },
       { ALT: () => this.SUBRULE(this.literal) },
       { ALT: () => this.SUBRULE(this.identifier) },
@@ -279,6 +282,43 @@ class NusaParser extends CstParser {
 
   private identifier = this.RULE('identifier', () => {
     return this.CONSUME(tokens.Identifier);
+  });
+
+  // Array literal: [expr, expr, ...]
+  private arrayLiteral = this.RULE('arrayLiteral', () => {
+    this.CONSUME(tokens.LBracket);
+    const elements: any[] = [];
+    this.OPTION(() => {
+      elements.push(this.SUBRULE(this.expression));
+      this.MANY(() => {
+        this.CONSUME(tokens.Comma);
+        this.OPTION2(() => elements.push(this.SUBRULE2(this.expression)));
+      });
+    });
+    this.CONSUME(tokens.RBracket);
+    return { elements };
+  });
+
+  // Object literal: {key: expr, key: expr, ...}
+  private objectLiteral = this.RULE('objectLiteral', () => {
+    this.CONSUME(tokens.LBrace);
+    const properties: any[] = [];
+    this.OPTION(() => {
+      properties.push(this.SUBRULE(this.objectProperty));
+      this.MANY(() => {
+        this.CONSUME(tokens.Comma);
+        this.OPTION2(() => properties.push(this.SUBRULE2(this.objectProperty)));
+      });
+    });
+    this.CONSUME(tokens.RBrace);
+    return { properties };
+  });
+
+  private objectProperty = this.RULE('objectProperty', () => {
+    const key = this.CONSUME(tokens.Identifier);
+    this.CONSUME(tokens.Colon);
+    const value = this.SUBRULE(this.expression);
+    return { key, value };
   });
 }
 
@@ -506,11 +546,16 @@ function convertBlockStatement(children: any): BlockStatementNode {
 }
 
 function convertExpression(children: any): ASTNode {
-  // console.log('convertExpression children keys:', Object.keys(children));
-  if (children.pipelineExpression) {
-    return convertPipelineExpression(children.pipelineExpression[0].children);
+  // Use Pratt parser for all expressions
+  try {
+    return parseExpressionPratt(children);
+  } catch (error) {
+    // Fallback to old conversion if Pratt fails (silently)
+    if (children.pipelineExpression) {
+      return convertPipelineExpression(children.pipelineExpression[0].children);
+    }
+    throw new Error('Unknown expression type');
   }
-  throw new Error('Unknown expression type');
 }
 
 function convertPipelineExpression(children: any): ASTNode {
@@ -640,6 +685,12 @@ function convertPrimaryExpression(children: any): ASTNode {
   if (children.awaitExpression) {
     return convertAwaitExpression(children.awaitExpression[0].children);
   }
+  if (children.arrayLiteral) {
+    return convertArrayLiteral(children.arrayLiteral[0].children);
+  }
+  if (children.objectLiteral) {
+    return convertObjectLiteral(children.objectLiteral[0].children);
+  }
   if (children.callExpression) {
     return convertCallExpression(children.callExpression[0].children);
   }
@@ -703,6 +754,35 @@ function convertIdentifier(children: any): IdentifierNode {
   return {
     type: 'Identifier',
     name: children.Identifier[0].image,
+  };
+}
+
+function convertArrayLiteral(children: any): ASTNode {
+  const elements: ASTNode[] = [];
+  if (children.expression) {
+    for (const expr of children.expression) {
+      elements.push(convertExpression(expr.children));
+    }
+  }
+  return {
+    type: 'ArrayExpression',
+    elements,
+  };
+}
+
+function convertObjectLiteral(children: any): ASTNode {
+  const properties: any[] = [];
+  if (children.objectProperty) {
+    for (const prop of children.objectProperty) {
+      const propChildren = prop.children;
+      const key = propChildren.key ? propChildren.key[0].children.Identifier[0].image : propChildren.Identifier[0].image;
+      const value = convertExpression(propChildren.value ? propChildren.value[0].children : propChildren.expression[0].children);
+      properties.push({ key, value });
+    }
+  }
+  return {
+    type: 'ObjectExpression',
+    properties,
   };
 }
 

@@ -1,0 +1,54 @@
+// Nested Pipelines with New Expressions
+// Demonstrates: Pipeline operator with member expressions and arrays
+
+fn double(x) {
+  let result = x * 2;
+  return result;
+}
+
+fn addTen(x) {
+  let result = x + 10;
+  return result;
+}
+
+fn getFirst(items) {
+  let first = items[0];
+  return first;
+}
+
+fn processArray() {
+  let numbers = [1, 2, 3, 4, 5];
+  let first = numbers[0];
+  let doubled = first |> double;
+  let final = doubled |> addTen;
+  return final;
+}
+
+fn processNestedData() {
+  let appData = {
+    values: [10, 20, 30],
+    multiplier: 2
+  };
+  
+  let firstValue = appData.values[0];
+  let processed = firstValue |> double |> addTen;
+  
+  return processed;
+}
+
+fn chainOperations() {
+  let input = 5;
+  let step1 = input |> double;
+  let step2 = step1 |> addTen;
+  let step3 = step2 |> double;
+  return step3;
+}
+
+fn main() {
+  let result1 = processArray();
+  let result2 = processNestedData();
+  let result3 = chainOperations();
+  
+  return result3;
+}
+

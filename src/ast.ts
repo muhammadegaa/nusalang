@@ -12,6 +12,9 @@ export type ASTNode =
   | ReturnStatementNode
   | BlockStatementNode
   | CallExpressionNode
+  | MemberExpressionNode
+  | ArrayExpressionNode
+  | ObjectExpressionNode
   | IdentifierNode
   | LiteralNode
   | BinaryExpressionNode
@@ -131,6 +134,28 @@ export interface PipelineExpressionNode extends BaseNode {
 export interface AwaitExpressionNode extends BaseNode {
   type: 'AwaitExpression';
   argument: ASTNode;
+}
+
+export interface MemberExpressionNode extends BaseNode {
+  type: 'MemberExpression';
+  object: ASTNode;
+  property: ASTNode;
+  computed: boolean; // true for arr[0], false for obj.prop
+}
+
+export interface ArrayExpressionNode extends BaseNode {
+  type: 'ArrayExpression';
+  elements: ASTNode[];
+}
+
+export interface ObjectExpressionNode extends BaseNode {
+  type: 'ObjectExpression';
+  properties: ObjectPropertyNode[];
+}
+
+export interface ObjectPropertyNode {
+  key: string;
+  value: ASTNode;
 }
 
 export interface PageDeclarationNode extends BaseNode {

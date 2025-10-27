@@ -1,0 +1,46 @@
+// Phase 0.6: Arrays and Objects Demo
+// Demonstrates working array and object literals
+
+fn createTeam() {
+  let members = [
+    { name: "Alice", role: "lead", active: true },
+    { name: "Bob", role: "dev", active: true },
+    { name: "Carol", role: "design", active: false }
+  ];
+  return members;
+}
+
+fn getConfiguration() {
+  let config = {
+    port: 3000,
+    host: "localhost",
+    timeout: 5000,
+    retries: 3
+  };
+  return config;
+}
+
+fn buildMatrix() {
+  let matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+  ];
+  return matrix;
+}
+
+fn processScores() {
+  let scores = [95, 87, 92, 88, 90];
+  let firstScore = scores[0];
+  return firstScore;
+}
+
+fn main() {
+  let team = createTeam();
+  let config = getConfiguration();
+  let matrix = buildMatrix();
+  let topScore = processScores();
+  
+  return "Phase 0.6: Arrays and Objects working!";
+}
+

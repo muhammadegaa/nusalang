@@ -1,0 +1,53 @@
+// Chained Member Access Demo
+// Demonstrates: Member expressions, computed access, and chaining
+
+fn getUserName(user) {
+  let name = user.name;
+  return name;
+}
+
+fn getFirstScore(scores) {
+  let first = scores[0];
+  return first;
+}
+
+fn getNestedProperty(appData) {
+  let value = appData.user.profile.email;
+  return value;
+}
+
+fn getMixedAccess(appData) {
+  // Mix of member and computed access
+  let value = appData.items[0].name;
+  return value;
+}
+
+fn processData() {
+  let appData = {
+    user: {
+      name: "Alice",
+      profile: {
+        email: "alice@example.com",
+        age: 27
+      }
+    },
+    items: [
+      { name: "Item 1", price: 100 },
+      { name: "Item 2", price: 200 }
+    ],
+    scores: [95, 87, 92]
+  };
+  
+  let userName = appData.user.name;
+  let userEmail = appData.user.profile.email;
+  let firstItem = appData.items[0].name;
+  let topScore = appData.scores[0];
+  
+  return userName;
+}
+
+fn main() {
+  let result = processData();
+  return result;
+}
+

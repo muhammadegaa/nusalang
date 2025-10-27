@@ -14,6 +14,9 @@ import {
   ReturnStatementNode,
   BlockStatementNode,
   CallExpressionNode,
+  MemberExpressionNode,
+  ArrayExpressionNode,
+  ObjectExpressionNode,
   IdentifierNode,
   LiteralNode,
   BinaryExpressionNode,
@@ -74,6 +77,12 @@ export class CodeGenerator {
         return this.generateBlockStatement(node);
       case 'CallExpression':
         return this.generateCallExpression(node);
+      case 'MemberExpression':
+        return this.generateMemberExpression(node);
+      case 'ArrayExpression':
+        return this.generateArrayExpression(node);
+      case 'ObjectExpression':
+        return this.generateObjectExpression(node);
       case 'Identifier':
         return this.generateIdentifier(node);
       case 'Literal':
@@ -228,6 +237,39 @@ export class CodeGenerator {
 
   private generateAwaitExpression(node: AwaitExpressionNode): string {
     return `await ${this.generateNode(node.argument)}`;
+  }
+
+  private generateMemberExpression(node: MemberExpressionNode): string {
+    const object = this.generateNode(node.object);
+    const property = this.generateNode(node.property);
+    
+    if (node.computed) {
+      // arr[index]
+      return `${object}[${property}]`;
+    } else {
+      // obj.prop
+      return `${object}.${property}`;
+    }
+  }
+
+  private generateArrayExpression(node: ArrayExpressionNode): string {
+    const elements = node.elements.map((el) => this.generateNode(el)).join(', ');
+    return `[${elements}]`;
+  }
+
+  private generateObjectExpression(node: ObjectExpressionNode): string {
+    if (node.properties.length === 0) {
+      return '{}';
+    }
+
+    const properties = node.properties
+      .map((prop) => {
+        const value = this.generateNode(prop.value);
+        return `${prop.key}: ${value}`;
+      })
+      .join(', ');
+
+    return `{ ${properties} }`;
   }
 }
 

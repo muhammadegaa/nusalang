@@ -2,16 +2,22 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.5 (v0.5.0-alpha)** - Language completeness with template literals and configuration.
+**Current Version: Phase 0.6 (v0.6.0-alpha)** - Expression completeness with arrays and objects.
 
 ## ✨ Features
 
-### Phase 0.5 (v0.5.0-alpha) - Template Literals & Configuration 🎉
+### Phase 0.6 (v0.6.0-alpha) - Arrays & Objects + Pratt Parser 🚀
+- ✅ **Array Literals**: `[1, 2, 3]`, `[[nested]]`, array indexing `arr[0]`
+- ✅ **Object Literals**: `{name: "Alice", age: 27}`, nested objects
+- ✅ **Pratt Parser**: 465 LOC expression parser with proper precedence
+- ✅ **174 Tests**: 20 new Pratt parser tests + all existing tests passing
+- ✅ **3 New Examples**: Arrays, objects, and Phase 0.6 demo
+- 📝 **Member Expressions**: Fully implemented in Pratt, integration in Phase 0.7
+
+### Phase 0.5 - Template Literals & Configuration
 - ✅ **Template Literals**: Full support for `` `Hello, ${name}!` `` with interpolation
 - ✅ **`.nusarc` Configuration**: Project-level config file with validation
 - ✅ **Config Runtime Access**: Use `config.port`, `config.db` in your code
-- ✅ **154 Tests**: Comprehensive test coverage including new features
-- ✅ **3 New Examples**: Template demo, config demo, Phase 0.5 showcase
 
 ### Phase 0.4 - Developer Experience & Routing
 - ✅ **@route Annotations**: Declarative HTTP routing with `@route("/path")`
