@@ -4,6 +4,8 @@
 
 **Current Version: v1.0.0-alpha** 🎉 - First public release! Stable compiler, reactive runtime, and comprehensive documentation.
 
+> **Phase 1.1 Update**: Parser integration investigation complete. Full Pratt/Chevrotain merge deferred to Phase 1.2 (requires Chevrotain grammar refactor). See `PHASE_1.1_STATUS.md` for details.
+
 [![Tests](https://img.shields.io/badge/tests-193%20passing-brightgreen)](https://github.com/muhammadegaa/nusalang)
 [![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0--alpha-orange)](https://github.com/muhammadegaa/nusalang/releases)

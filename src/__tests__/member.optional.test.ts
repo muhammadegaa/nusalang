@@ -7,7 +7,8 @@ import { describe, it, expect } from 'vitest';
 import { compile } from '../compiler.js';
 import { execute } from '../runtime/execute.js';
 
-// Deferred to Phase 1.1 - Requires full Pratt parser integration
+// Deferred to Phase 1.2 - Requires Chevrotain grammar refactor
+// Foundation complete (Pratt parser + bridge), integration pending
 describe.skip('Optional Chaining', () => {
   describe('Optional Member Access (?.)', () => {
     it('should parse optional member access', async () => {
