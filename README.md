@@ -2,17 +2,24 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.6 (v0.6.0-alpha)** - Expression completeness with arrays and objects.
+**Current Version: Phase 0.7 (v0.7.0-foundation)** - Foundation for member access & optional chaining.
 
 ## ✨ Features
 
-### Phase 0.6 (v0.6.0-alpha) - Arrays & Objects + Pratt Parser 🚀
+### Phase 0.7 (v0.7.0-foundation) - Member Access & Optional Chaining Foundation 🏗️
+- ✅ **Lexer Tokens**: `?.` (OptionalDot) and `?[` (OptionalBracket) operators
+- ✅ **Pratt Parser Enhancement**: Full optional chaining & call chaining support
+- ✅ **AST Nodes**: `OptionalMemberExpressionNode` with proper typing
+- ✅ **Code Generation**: Generates correct `obj?.prop` and `arr?.[0]` JavaScript
+- ✅ **29 Tests Written**: Optional chaining & call chaining test suites ready
+- ⏸️ **Integration Pending**: Chevrotain-Pratt bridge layer needed (Phase 0.8)
+- 📝 **Status**: Foundation complete, awaiting full parser integration
+
+### Phase 0.6 - Arrays & Objects
 - ✅ **Array Literals**: `[1, 2, 3]`, `[[nested]]`, array indexing `arr[0]`
 - ✅ **Object Literals**: `{name: "Alice", age: 27}`, nested objects
 - ✅ **Pratt Parser**: 465 LOC expression parser with proper precedence
-- ✅ **174 Tests**: 20 new Pratt parser tests + all existing tests passing
-- ✅ **3 New Examples**: Arrays, objects, and Phase 0.6 demo
-- 📝 **Member Expressions**: Fully implemented in Pratt, integration in Phase 0.7
+- ✅ **174 Tests Passing**: Zero regressions
 
 ### Phase 0.5 - Template Literals & Configuration
 - ✅ **Template Literals**: Full support for `` `Hello, ${name}!` `` with interpolation

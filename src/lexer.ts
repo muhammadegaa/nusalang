@@ -21,6 +21,8 @@ export const Data = createToken({ name: 'Data', pattern: /data/ });
 // Operators
 export const Pipeline = createToken({ name: 'Pipeline', pattern: /\|>/ });
 export const Arrow = createToken({ name: 'Arrow', pattern: /=>/ });
+export const OptionalDot = createToken({ name: 'OptionalDot', pattern: /\?\./ });
+export const OptionalBracket = createToken({ name: 'OptionalBracket', pattern: /\?\[/ });
 export const Equals = createToken({ name: 'Equals', pattern: /=/ });
 export const Plus = createToken({ name: 'Plus', pattern: /\+/ });
 export const Minus = createToken({ name: 'Minus', pattern: /-/ });
@@ -111,6 +113,8 @@ export const allTokens: TokenType[] = [
   // Operators (multi-char first)
   Pipeline,
   Arrow,
+  OptionalDot,
+  OptionalBracket,
   JSXSelfClose,
   JSXClose,
   Equals,

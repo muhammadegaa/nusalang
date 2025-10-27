@@ -1,0 +1,1 @@
+Due to the complexity of full Pratt-Chevrotain integration, Phase 0.7 provides the foundation for member access and optional chaining. The Pratt parser has full support, but integration with the main statement parser requires deeper architectural changes. This is documented for Phase 0.8.

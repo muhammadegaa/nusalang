@@ -40,7 +40,9 @@ export function getPrecedence(tokenType: string): Precedence {
     case 'LessThan':
       return Precedence.COMPARISON;
     case 'Dot':
+    case 'OptionalDot':
     case 'LBracket':  // Computed member access
+    case 'OptionalBracket':  // Optional computed access
     case 'LParen':    // Call expression
       return Precedence.MEMBER;
     default:
@@ -210,9 +212,19 @@ export class PrattParser {
       return this.parseMemberExpression(left);
     }
 
+    // Optional member access: obj?.prop
+    if (tokenType === 'OptionalDot') {
+      return this.parseOptionalMemberExpression(left);
+    }
+
     // Computed member: arr[index]
     if (tokenType === 'LBracket') {
       return this.parseComputedMemberExpression(left);
+    }
+
+    // Optional computed member: arr?.[index]
+    if (tokenType === 'OptionalBracket') {
+      return this.parseOptionalComputedMemberExpression(left);
     }
 
     // Call expression: func()
@@ -395,8 +407,56 @@ export class PrattParser {
       computed: false,
     };
 
+    // Check for chaining (including optional chaining)
+    if (this.stream.matchAny('Dot', 'OptionalDot', 'LBracket', 'OptionalBracket', 'LParen')) {
+      return this.parseInfix(member);
+    }
+
+    return member;
+  }
+
+  /**
+   * Parse optional member expression: obj?.prop
+   */
+  private parseOptionalMemberExpression(object: ASTNode): ASTNode {
+    this.stream.expect('OptionalDot');
+    const propertyToken = this.stream.expect('Identifier');
+
+    const member: ASTNode = {
+      type: 'OptionalMemberExpression',
+      object,
+      property: {
+        type: 'Identifier',
+        name: propertyToken.image,
+      },
+      computed: false,
+    };
+
     // Check for chaining
-    if (this.stream.match('Dot') || this.stream.match('LBracket') || this.stream.match('LParen')) {
+    if (this.stream.matchAny('Dot', 'OptionalDot', 'LBracket', 'OptionalBracket', 'LParen')) {
+      return this.parseInfix(member);
+    }
+
+    return member;
+  }
+
+  /**
+   * Parse optional computed member expression: arr?.[index]
+   */
+  private parseOptionalComputedMemberExpression(object: ASTNode): ASTNode {
+    this.stream.expect('OptionalBracket');
+    const index = this.parseExpression();
+    this.stream.expect('RBracket');
+
+    const member: ASTNode = {
+      type: 'OptionalMemberExpression',
+      object,
+      property: index,
+      computed: true,
+    };
+
+    // Check for chaining
+    if (this.stream.matchAny('Dot', 'OptionalDot', 'LBracket', 'OptionalBracket', 'LParen')) {
       return this.parseInfix(member);
     }
 
@@ -418,8 +478,8 @@ export class PrattParser {
       computed: true,
     };
 
-    // Check for chaining
-    if (this.stream.match('Dot') || this.stream.match('LBracket') || this.stream.match('LParen')) {
+    // Check for chaining (including optional chaining)
+    if (this.stream.matchAny('Dot', 'OptionalDot', 'LBracket', 'OptionalBracket', 'LParen')) {
       return this.parseInfix(member);
     }
 
@@ -451,8 +511,8 @@ export class PrattParser {
       arguments: args,
     };
 
-    // Check for chaining: func().prop or func()[0] or func()()
-    if (this.stream.match('Dot') || this.stream.match('LBracket') || this.stream.match('LParen')) {
+    // Check for chaining: func().prop or func()[0] or func()() or func()?.prop
+    if (this.stream.matchAny('Dot', 'OptionalDot', 'LBracket', 'OptionalBracket', 'LParen')) {
       return this.parseInfix(call);
     }
 

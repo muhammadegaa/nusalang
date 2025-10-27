@@ -15,6 +15,7 @@ import {
   BlockStatementNode,
   CallExpressionNode,
   MemberExpressionNode,
+  OptionalMemberExpressionNode,
   ArrayExpressionNode,
   ObjectExpressionNode,
   IdentifierNode,
@@ -79,6 +80,8 @@ export class CodeGenerator {
         return this.generateCallExpression(node);
       case 'MemberExpression':
         return this.generateMemberExpression(node);
+      case 'OptionalMemberExpression':
+        return this.generateOptionalMemberExpression(node);
       case 'ArrayExpression':
         return this.generateArrayExpression(node);
       case 'ObjectExpression':
@@ -249,6 +252,19 @@ export class CodeGenerator {
     } else {
       // obj.prop
       return `${object}.${property}`;
+    }
+  }
+
+  private generateOptionalMemberExpression(node: OptionalMemberExpressionNode): string {
+    const object = this.generateNode(node.object);
+    const property = this.generateNode(node.property);
+    
+    if (node.computed) {
+      // arr?.[index]
+      return `${object}?.[${property}]`;
+    } else {
+      // obj?.prop
+      return `${object}?.${property}`;
     }
   }
 

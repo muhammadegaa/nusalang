@@ -13,6 +13,7 @@ export type ASTNode =
   | BlockStatementNode
   | CallExpressionNode
   | MemberExpressionNode
+  | OptionalMemberExpressionNode
   | ArrayExpressionNode
   | ObjectExpressionNode
   | IdentifierNode
@@ -141,6 +142,13 @@ export interface MemberExpressionNode extends BaseNode {
   object: ASTNode;
   property: ASTNode;
   computed: boolean; // true for arr[0], false for obj.prop
+}
+
+export interface OptionalMemberExpressionNode extends BaseNode {
+  type: 'OptionalMemberExpression';
+  object: ASTNode;
+  property: ASTNode;
+  computed: boolean; // true for arr?.[0], false for obj?.prop
 }
 
 export interface ArrayExpressionNode extends BaseNode {
