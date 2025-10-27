@@ -22,7 +22,7 @@ import {
   PageDeclarationNode,
   DataDeclarationNode,
 } from './ast.js';
-import { parseExpressionPratt } from './parser/core/expression.js';
+import { parseExpressionFromCst } from './parser/core/bridge.js';
 
 class NusaParser extends CstParser {
   constructor() {
@@ -546,15 +546,17 @@ function convertBlockStatement(children: any): BlockStatementNode {
 }
 
 function convertExpression(children: any): ASTNode {
-  // Use Pratt parser for all expressions
+  // Use Pratt parser for all expressions via bridge
   try {
-    return parseExpressionPratt(children);
+    return parseExpressionFromCst(children);
   } catch (error) {
-    // Fallback to old conversion if Pratt fails (silently)
+    // Fallback to legacy conversion for complex pipeline expressions
+    // that the Pratt parser might not handle yet
     if (children.pipelineExpression) {
       return convertPipelineExpression(children.pipelineExpression[0].children);
     }
-    throw new Error('Unknown expression type');
+    // Re-throw with context
+    throw new Error(`Expression conversion failed: ${(error as Error).message}`);
   }
 }
 

@@ -2,18 +2,24 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.7 (v0.7.0-foundation)** - Foundation for member access & optional chaining.
+**Current Version: Phase 0.8-Bridge (v0.8.0-bridge-ready)** - Parser bridge complete, deep integration pending.
 
 ## ✨ Features
 
-### Phase 0.7 (v0.7.0-foundation) - Member Access & Optional Chaining Foundation 🏗️
+### Phase 0.8-Bridge (v0.8.0-bridge-ready) - Parser Bridge Layer 🌉
+- ✅ **Parser Bridge**: Complete CST-to-Pratt token bridge (`bridge.ts`)
+- ✅ **Integration Started**: Pratt parser wired into main parser
+- ✅ **174 Tests Passing**: Zero regressions, full backward compatibility
+- ✅ **29 Tests Ready**: Optional chaining & call chaining tests written
+- ✅ **Clear Roadmap**: 6-8 hour Chevrotain refactor documented
+- ⏸️ **Deep Integration**: Requires permissive Chevrotain expression rule
+- 📝 **Status**: Bridge ready, awaiting dedicated integration session
+
+### Phase 0.7 - Foundation
 - ✅ **Lexer Tokens**: `?.` (OptionalDot) and `?[` (OptionalBracket) operators
 - ✅ **Pratt Parser Enhancement**: Full optional chaining & call chaining support
 - ✅ **AST Nodes**: `OptionalMemberExpressionNode` with proper typing
 - ✅ **Code Generation**: Generates correct `obj?.prop` and `arr?.[0]` JavaScript
-- ✅ **29 Tests Written**: Optional chaining & call chaining test suites ready
-- ⏸️ **Integration Pending**: Chevrotain-Pratt bridge layer needed (Phase 0.8)
-- 📝 **Status**: Foundation complete, awaiting full parser integration
 
 ### Phase 0.6 - Arrays & Objects
 - ✅ **Array Literals**: `[1, 2, 3]`, `[[nested]]`, array indexing `arr[0]`
