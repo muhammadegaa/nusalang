@@ -1,7 +1,7 @@
 {
   "name": "nusalang",
-  "version": "0.7.0-foundation",
-  "description": "NusaLang - A programming language with arrays, objects, template literals, optional chaining foundation, and full-stack capabilities",
+  "version": "0.9.0-alpha",
+  "description": "NusaLang - Modern programming language with reactive runtime, signals, computed values, and WebSocket streaming",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
