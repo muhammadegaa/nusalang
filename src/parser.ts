@@ -123,7 +123,30 @@ class NusaParser extends CstParser {
   private annotation = this.RULE('annotation', () => {
     this.CONSUME(tokens.At);
     const name = this.CONSUME(tokens.Identifier);
-    return { name };
+    
+    // Optional arguments for annotations like @route("/path")
+    const args: any[] = [];
+    this.OPTION(() => {
+      this.CONSUME(tokens.LParen);
+      this.OPTION2(() => {
+        args.push(this.SUBRULE(this.annotationArgument));
+        this.MANY(() => {
+          this.CONSUME(tokens.Comma);
+          args.push(this.SUBRULE2(this.annotationArgument));
+        });
+      });
+      this.CONSUME(tokens.RParen);
+    });
+    
+    return { name, args };
+  });
+
+  private annotationArgument = this.RULE('annotationArgument', () => {
+    return this.OR([
+      { ALT: () => this.CONSUME(tokens.StringLiteral) },
+      { ALT: () => this.CONSUME(tokens.NumberLiteral) },
+      { ALT: () => this.CONSUME(tokens.Identifier) },
+    ]);
   });
 
   private parameter = this.RULE('parameter', () => {
@@ -374,9 +397,25 @@ function convertFunctionDeclaration(children: any): FunctionDeclarationNode {
   
   if (children.annotation) {
     for (const anno of children.annotation) {
+      const args: any[] = [];
+      
+      // Parse annotation arguments if present
+      if (anno.children.annotationArgument) {
+        for (const arg of anno.children.annotationArgument) {
+          if (arg.children.StringLiteral) {
+            args.push(arg.children.StringLiteral[0].image.slice(1, -1)); // Remove quotes
+          } else if (arg.children.NumberLiteral) {
+            args.push(parseFloat(arg.children.NumberLiteral[0].image));
+          } else if (arg.children.Identifier) {
+            args.push(arg.children.Identifier[0].image);
+          }
+        }
+      }
+      
       annotations.push({
         type: 'Annotation',
         name: anno.children.Identifier[0].image,
+        args: args.length > 0 ? args : undefined,
       });
     }
   }

@@ -112,10 +112,18 @@ export class CodeGenerator {
   private generateFunctionDeclaration(node: FunctionDeclarationNode): string {
     let code = '';
 
-    // Add annotations as comments for now (M3 will implement @api properly)
+    // Handle annotations including @route for automatic HTTP endpoint exposure
+    let routePath: string | undefined;
     if (node.annotations && node.annotations.length > 0) {
       for (const annotation of node.annotations) {
-        code += `// @${annotation.name}\n`;
+        if (annotation.name === 'route' && annotation.args && annotation.args.length > 0) {
+          routePath = String(annotation.args[0]);
+          code += `// @route("${routePath}")\n`;
+        } else if (annotation.name === 'api') {
+          code += `// @api\n`;
+        } else {
+          code += `// @${annotation.name}\n`;
+        }
       }
     }
 
@@ -124,6 +132,13 @@ export class CodeGenerator {
     const body = this.generateBlockStatement(node.body);
 
     code += `${asyncKeyword}function ${node.name}(${params}) ${body}`;
+
+    // Auto-register route if @route annotation is present
+    if (routePath) {
+      code += `\n\n// Auto-register route\nif (typeof router !== 'undefined') {\n`;
+      code += `  router.registerPage('${routePath}', ${node.name});\n`;
+      code += `}`;
+    }
 
     return code;
   }

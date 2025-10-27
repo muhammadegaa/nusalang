@@ -1,0 +1,47 @@
+// Routes API Example
+// Demonstrates: @route annotations, automatic HTTP exposure, RESTful APIs
+
+@route("/api/users")
+async fn getUsers() {
+  let count = 3;
+  return count;
+}
+
+@route("/api/user")
+async fn getUser(id) {
+  let userId = id;
+  let name = "Alice";
+  let email = "alice@example.com";
+  
+  return userId;
+}
+
+@route("/api/products")
+fn listProducts() {
+  let count = 25;
+  let category = "Electronics";
+  
+  return count;
+}
+
+@api
+@route("/api/status")
+fn healthCheck() {
+  let status = "healthy";
+  let uptime = 3600;
+  let version = "0.4.0";
+  
+  return status;
+}
+
+page "/docs" {
+  let title = "API Documentation";
+  let routes = "/api/users, /api/user, /api/products, /api/status";
+  
+  return routes;
+}
+
+fn main() {
+  return "Routes API Demo loaded";
+}
+

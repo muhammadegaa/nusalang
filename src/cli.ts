@@ -8,9 +8,11 @@
 import { Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as chokidar from 'chokidar';
 import { compile } from './compiler.js';
 import { execute } from './runtime/execute.js';
 import { startDevServer } from './runtime/server.js';
+import { router } from './runtime/router.js';
 
 const program = new Command();
 
@@ -59,42 +61,76 @@ program
   .option('-p, --port <port>', 'Port number', '3000')
   .option('-H, --host <host>', 'Host address', 'localhost')
   .option('--no-reload', 'Disable hot reload')
+  .option('--watch', 'Enable file watching (hot reload)')
   .action(async (inputFile: string | undefined, options: any) => {
     const port = parseInt(options.port, 10);
     const host = options.host;
+    const watchEnabled = options.watch || options.reload !== false;
     
     console.log('🚀 Starting NusaLang development server...\n');
     
-    // If input file provided, compile and execute it first
-    if (inputFile) {
-      try {
-        console.log(`📦 Loading ${inputFile}...`);
-        const source = fs.readFileSync(inputFile, 'utf-8');
-        const result = await compile(source);
-        
-        if (!result.success) {
-          console.error('❌ Compilation failed:', result.errors);
-          process.exit(1);
+    // Load application
+    async function loadApp() {
+      if (inputFile) {
+        try {
+          console.log(`📦 ${watchEnabled ? 'Reloading' : 'Loading'} ${inputFile}...`);
+          const source = fs.readFileSync(inputFile, 'utf-8');
+          const result = await compile(source);
+          
+          if (!result.success) {
+            console.error('❌ Compilation failed:', result.errors);
+            return false;
+          }
+          
+          // Clear existing routes before reloading
+          router.clear();
+          
+          // Execute to register pages/routes
+          await execute(result.code!, {
+            enableRouter: true,
+            enableDb: true,
+          });
+          
+          console.log(`✅ Application ${watchEnabled ? 'reloaded' : 'loaded'} at ${new Date().toLocaleTimeString()}\n`);
+          return true;
+        } catch (error) {
+          console.error('❌ Error loading application:', (error as Error).message);
+          return false;
         }
-        
-        // Execute to register pages/routes
-        await execute(result.code!, {
-          enableRouter: true,
-          enableDb: true,
-        });
-        
-        console.log('✅ Application loaded\n');
-      } catch (error) {
-        console.error('❌ Error loading application:', (error as Error).message);
-        process.exit(1);
       }
+      return true;
+    }
+    
+    // Initial load
+    const loaded = await loadApp();
+    if (!loaded && inputFile) {
+      process.exit(1);
     }
     
     const server = await startDevServer({
       port,
       host,
-      hotReload: options.reload !== false,
+      hotReload: watchEnabled,
     });
+    
+    // Setup file watcher for hot reload
+    if (watchEnabled && inputFile) {
+      console.log(`👀 Watching ${inputFile} for changes...\n`);
+      
+      const watcher = chokidar.watch(inputFile, {
+        persistent: true,
+        ignoreInitial: true,
+      });
+      
+      watcher.on('change', async (path) => {
+        console.log(`\n♻️  File changed: ${path}`);
+        await loadApp();
+      });
+      
+      watcher.on('error', (error) => {
+        console.error('❌ Watcher error:', error);
+      });
+    }
     
     // Handle graceful shutdown
     process.on('SIGINT', async () => {

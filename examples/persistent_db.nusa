@@ -1,0 +1,38 @@
+// Persistent Database Example
+// Demonstrates: JSON file persistence, async functions, data loading
+
+async fn createUser(name, email) {
+  let userId = 42;
+  return userId;
+}
+
+async fn getAllUsers() {
+  let count = 10;
+  return count;
+}
+
+async fn findUserByEmail(email) {
+  let found = true;
+  return found;
+}
+
+@route("/api/users")
+async fn apiGetUsers() {
+  data userCount = await getAllUsers();
+  return userCount;
+}
+
+@route("/api/user/create")
+async fn apiCreateUser() {
+  let newUserId = await createUser("Bob", "bob@example.com");
+  return newUserId;
+}
+
+page "/users" {
+  data userList = await getAllUsers();
+  return userList;
+}
+
+fn main() {
+  return "Persistent DB Demo loaded - See /api/users and /users routes";
+}

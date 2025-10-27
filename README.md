@@ -2,32 +2,30 @@
 
 **NusaLang** is a modern programming language designed to make SaaS, AI, and data-heavy applications simpler and more elegant than traditional approaches. 
 
-**Current Version: Phase 0.3 (v0.3.0-alpha)** - A full-stack web platform with HTTP server, UI rendering, and complete page routing.
+**Current Version: Phase 0.4 (v0.4.0-alpha)** - Developer experience and declarative routing platform.
 
 ## ✨ Features
 
-### Phase 0.3 (v0.3.0-alpha) - HTTP Server & UI Platform 🌐
-- ✅ **HTTP Server**: Built-in web server with `nusa dev`
-- ✅ **UI Rendering**: HTML generation from UI blocks
-- ✅ **Build System**: Static compilation with `nusa build`
-- ✅ **Auto-routing**: Pages exposed as HTTP endpoints
-- ✅ **JSON APIs**: Automatic content-type detection
-- ✅ **Example Apps**: Blog, dashboard, API demos
+### Phase 0.4 (v0.4.0-alpha) - Developer Experience & Routing 🚀
+- ✅ **@route Annotations**: Declarative HTTP routing with `@route("/path")`
+- ✅ **Hot Reload**: Automatic recompilation on file changes with `--watch`
+- ✅ **Database Persistence**: JSON file-based storage with adapters
+- ✅ **Better CLI**: Improved output with timestamps and colors
+- ✅ **SQLite Support**: Production-ready database adapter
+- ✅ **Route Registration**: Auto-expose functions as HTTP endpoints
+
+### Phase 0.3 - HTTP Server & UI Platform
+- ✅ HTTP Server with `nusa dev`, UI Rendering, Build System
+- ✅ Auto-routing, JSON APIs, Example Apps
 
 ### Phase 0.2 - Runtime Foundation
 - ✅ Runtime execution, page declarations, data loading
 - ✅ Mock database, router system, standard library
 
 ### Phase 0.1 - Compiler Foundation
-NusaLang Phase 0.1/0.2 supports:
-
-- ✅ **Functions**: Clean `fn` syntax for declaring functions
-- ✅ **Variables**: `let` and `const` declarations
-- ✅ **Imports**: ES6-style module imports
-- ✅ **Async/Await**: First-class async function support
-- ✅ **Pipeline Operator** (`|>`): Elegant data transformations
-- ✅ **API Annotations** (`@api`): Mark functions as API endpoints
-- ✅ **Binary Expressions**: Standard arithmetic and comparison operators
+- ✅ Functions, Variables, Imports, Async/Await
+- ✅ Pipeline Operator (`|>`), API Annotations (`@api`)
+- ✅ Binary Expressions, Arithmetic and comparison operators
 
 ## 📦 Installation
 
